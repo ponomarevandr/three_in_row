@@ -3,6 +3,8 @@
 
 namespace Graphics {
 
+int sign(int);
+
 struct Point;
 struct Vector;
 
@@ -13,6 +15,8 @@ struct Point {
 	Point(int x, int y);
 	Point& operator+=(const Vector&);
 	Point& operator-=(const Vector&);
+	bool operator==(const Point&) const;
+	bool operator!=(const Point&) const;
 };
 
 struct Vector {
@@ -25,6 +29,10 @@ struct Vector {
 	Vector operator-() const;
 	Vector& operator*=(int multiplier);
 	Vector& operator/=(int divisor);
+	bool operator==(const Vector&) const;
+	bool operator!=(const Vector&) const;
+	Vector direction() const;
+	int manhattanLength() const;
 };
 
 Point operator+(const Point&, const Vector&);
@@ -35,6 +43,13 @@ Vector operator-(const Vector&, const Vector&);
 Vector operator*(const Vector&, int multiplier);
 Vector operator*(int multiplier, const Vector&);
 Vector operator/(const Vector&, int divisor);
+int crossProduct(const Vector&, const Vector&);
+int dotProduct(const Vector&, const Vector&);
+
+extern const Vector RIGHT;
+extern const Vector UP;
+extern const Vector LEFT;
+extern const Vector DOWN;
 
 
 struct Segment {

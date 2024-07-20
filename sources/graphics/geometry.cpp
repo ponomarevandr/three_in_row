@@ -1,9 +1,19 @@
 #include "geometry.h"
 
+#include <cmath>
 #include <algorithm>
 
 
 namespace Graphics {
+
+int sign(int value) {
+	if (value > 0)
+		return 1;
+	if (value == 0)
+		return 0;
+	return -1;
+}
+
 
 Point::Point(int x, int y): x(x), y(y) {}
 
@@ -17,6 +27,14 @@ Point& Point::operator-=(const Vector& vector) {
 	x -= vector.x;
 	y -= vector.y;
 	return *this;
+}
+
+bool Point::operator==(const Point& other) const {
+	return x == other.x && y == other.y;
+}
+
+bool Point::operator!=(const Point& other) const {
+	return !(*this == other);
 }
 
 
@@ -48,6 +66,22 @@ Vector& Vector::operator/=(int divisor) {
 	x /= divisor;
 	y /= divisor;
 	return *this;
+}
+
+bool Vector::operator==(const Vector& other) const {
+	return x == other.x && y == other.y;
+}
+
+bool Vector::operator!=(const Vector& other) const {
+	return !(*this == other);
+}
+
+Vector Vector::direction() const {
+	return Vector(sign(x), sign(y));
+}
+
+int Vector::manhattanLength() const {
+	return std::abs(x) + std::abs(y);
 }
 
 
@@ -97,12 +131,25 @@ Vector operator/(const Vector& vector, int divisor) {
 	return result;
 }
 
+int crossProduct(const Vector& first, const Vector& second) {
+	return first.x * second.y - first.y * second.x;
+}
+
+int dotProduct(const Vector& first, const Vector& second) {
+	return first.x * second.x + first.y * second.y;
+}
+
+const Vector RIGHT(1, 0);
+const Vector UP(0, -1);
+const Vector LEFT(-1, 0);
+const Vector DOWN(0, 1);
+
 
 Segment::Segment(const Point& first, const Point& second): first(first), second(second) {}
 
 
 void Rectangle::sort(int& first, int& second) {
-	if (first < second) {
+	if (first > second) {
 		std::swap(first, second);
 	}
 }
