@@ -106,4 +106,9 @@ void fillRectangle(const Rectangle& rectangle, Color color) {
 	}
 }
 
+void fillScreen(Color color) {
+	Rectangle rectangle(Point(0, 0), getScreenWidth() - 1, getScreenHeight() - 1);
+	fillRectangle(rectangle, color);
+}
+
 }

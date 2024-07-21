@@ -30,6 +30,7 @@ void screenInitialize() {
 	setlocale(LC_ALL, "");
 	initscr();
 	cbreak();
+	keypad(stdscr, true);
 	noecho();
 	start_color();
 	initializeColorPairs();

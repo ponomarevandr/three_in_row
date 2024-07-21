@@ -35,4 +35,6 @@ void drawBox(const Rectangle& rectangle, Color foreground_color, Color backgroun
 
 void fillRectangle(const Rectangle& rectangle, Color color);
 
+void fillScreen(Color color);
+
 }
