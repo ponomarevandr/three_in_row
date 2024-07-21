@@ -1,8 +1,7 @@
 #include "game.h"
 
+#include "interface/input.h"
 #include "graphics/screen.h"
-
-#include <ncurses.h>
 
 
 namespace Interface {
@@ -19,7 +18,7 @@ void Game::run() {
 	while (!scenes.empty()) {
 		scenes.back()->draw();
 		Graphics::screenRefresh();
-		int key = getch();
+		int key = getKey();
 		scenes.back()->processKey(key);
 	}
 }

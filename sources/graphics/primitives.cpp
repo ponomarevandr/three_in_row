@@ -4,6 +4,8 @@
 
 #include <algorithm>
 
+#include "debug/output.h"
+
 
 namespace Graphics {
 
@@ -21,7 +23,7 @@ void drawString(const std::wstring& string, const Point& start, Color foreground
 void drawStringAtCenter(const std::wstring& string, const Rectangle& rectangle,
 		Color foreground_color, Color background_color) {
 	Point start = rectangle.getCenter();
-	start.x -= (string.size() + 1) / 2;
+	start.x -= (string.size() - 1) / 2;
 	drawString(string, start, foreground_color, background_color);
 }
 
@@ -34,7 +36,7 @@ void drawSymbol(wchar_t symbol, const Point& point, Color foreground_color,
 
 void drawSegment(const Segment& segment, Color foreground_color, Color background_color) {
 	Vector direction = (segment.second - segment.first).direction();
-	int length = (segment.second - segment.first).manhattanLength();
+	int length = (segment.second - segment.first).manhattanLength() + 1;
 	ColorPair colors(foreground_color, background_color);
 	if (direction == RIGHT)
 		mvhline(segment.first.y, segment.first.x, 0, length);

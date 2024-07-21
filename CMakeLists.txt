@@ -9,6 +9,7 @@ set(SOURCES
 	sources/graphics/primitives.cpp
 	sources/debug/output.cpp
 	sources/interface/game.cpp
+	sources/interface/input.cpp
 	sources/interface/scenes/scene_base.cpp
 	sources/interface/scenes/scene_main_menu.cpp
 	sources/interface/items/item_base.cpp

@@ -1,9 +1,8 @@
 #include "scene_base.h"
 
 #include "interface/game.h"
+#include "interface/input.h"
 #include "graphics/primitives.h"
-
-#include <ncurses.h>
 
 
 namespace Interface {
