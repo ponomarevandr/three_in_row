@@ -7,6 +7,7 @@ set(SOURCES
 	sources/graphics/geometry.cpp
 	sources/graphics/screen.cpp
 	sources/graphics/primitives.cpp
+	sources/debug/output.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)

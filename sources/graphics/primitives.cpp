@@ -97,4 +97,13 @@ void drawBox(const Rectangle& rectangle, Color foreground_color, Color backgroun
 }
 
 
+void fillRectangle(const Rectangle& rectangle, Color color) {
+	std::wstring string(rectangle.getWidth() + 1, L' ');
+	Point start = rectangle.top_left;
+	for (int i = 0; i <= rectangle.getHeight(); ++i) {
+		drawString(string, start, color, color);
+		++start.y;
+	}
+}
+
 }

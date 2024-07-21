@@ -32,4 +32,7 @@ void drawLine(const std::vector<Point>& points, Color foreground_color, Color ba
 
 void drawBox(const Rectangle& rectangle, Color foreground_color, Color background_color);
 
+
+void fillRectangle(const Rectangle& rectangle, Color color);
+
 }

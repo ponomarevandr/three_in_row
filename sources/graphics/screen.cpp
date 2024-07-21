@@ -23,6 +23,9 @@ void initializeColorPairs() {
 	}
 }
 
+int screen_width;
+int screen_height;
+
 void screenInitialize() {
 	setlocale(LC_ALL, "");
 	initscr();
@@ -31,6 +34,7 @@ void screenInitialize() {
 	start_color();
 	initializeColorPairs();
 	curs_set(0);
+	getmaxyx(stdscr, screen_height, screen_width);
 }
 
 void screenRefresh() {
@@ -39,6 +43,14 @@ void screenRefresh() {
 
 void screenFinalize() {
 	endwin();
+}
+
+int getScreenWidth() {
+	return screen_width;
+}
+
+int getScreenHeight() {
+	return screen_height;
 }
 
 

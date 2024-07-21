@@ -7,6 +7,9 @@ void screenInitialize();
 void screenRefresh();
 void screenFinalize();
 
+int getScreenWidth();
+int getScreenHeight();
+
 
 enum Color {
 	BLACK = 0,
