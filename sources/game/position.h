@@ -1,7 +1,10 @@
 #pragma once
 
-#include <inttypes.h>
+#include "graphics/geometry.h"
+
+#include <array>
 #include <vector>
+#include <inttypes.h>
 
 
 namespace Game {
@@ -11,22 +14,32 @@ private:
 	size_t height = 0;
 	size_t width = 0;
 	std::vector<uint64_t> field;
-	size_t scores[3];
+	std::array<size_t, 3> scores;
+
+private:
+	static const std::vector<Graphics::Vector> triples_center;
+	static const std::vector<Graphics::Vector> triples_edge;
 
 private:
 	size_t getIndexOuter(size_t row, size_t column) const;
 	size_t getIndexInner(size_t column) const;
+	void getScoreOfTriple(const Graphics::Point& start,
+		const std::vector<Graphics::Vector>& triples, size_t index,
+		uint8_t& player,size_t& score) const;
+	void calculateScores();
 
 public:
 	Position() = default;
 	Position(size_t height, size_t width);
 	Position(size_t height, size_t width, std::vector<uint64_t>&& field);
+	std::vector<uint64_t> takeField();
 	size_t getHeight() const;
 	size_t getWidth() const;
 	uint8_t getCell(size_t row, size_t column) const;
 	void setCell(size_t row, size_t column, uint8_t value);
 	bool isTurnPossible(size_t column) const;
 	void makeTurn(size_t column, uint8_t player);
+	std::array<size_t, 3> getScores() const;
 };
 
 }

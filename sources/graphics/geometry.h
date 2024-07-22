@@ -50,6 +50,10 @@ extern const Vector RIGHT;
 extern const Vector UP;
 extern const Vector LEFT;
 extern const Vector DOWN;
+extern const Vector NORTH_EAST;
+extern const Vector NORTH_WEST;
+extern const Vector SOUTH_WEST;
+extern const Vector SOUTH_EAST;
 
 
 struct Segment {

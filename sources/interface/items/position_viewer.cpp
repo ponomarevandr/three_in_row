@@ -4,11 +4,14 @@
 #include "graphics/primitives.h"
 #include "graphics/screen.h"
 
+#include <array>
+#include <string>
+
 
 namespace Interface {
 
 PositionViewer::PositionViewer(const Graphics::Point& position): Item(position) {
-	game_position = Game::Position(5, 40);
+	game_position = Game::Position(5, 7);
 }
 
 void PositionViewer::draw(bool is_active) const {
@@ -37,6 +40,13 @@ void PositionViewer::draw(bool is_active) const {
 			}
 		}
 	}
+	std::array<size_t, 3> scores = game_position.getScores();
+	drawString(std::to_wstring(scores[0]), Graphics::Point(1, game_position.getHeight() + 2),
+		Graphics::Color::BLACK, Graphics::Color::WHITE);
+	drawString(std::to_wstring(scores[1]), Graphics::Point(1, game_position.getHeight() + 4),
+		Graphics::Color::BLUE, Graphics::Color::WHITE);
+	drawString(std::to_wstring(scores[2]), Graphics::Point(1, game_position.getHeight() + 6),
+		Graphics::Color::GREEN, Graphics::Color::WHITE);
 }
 
 void PositionViewer::processKey(int key) {

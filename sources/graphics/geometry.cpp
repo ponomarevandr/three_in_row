@@ -143,6 +143,10 @@ const Vector RIGHT(1, 0);
 const Vector UP(0, -1);
 const Vector LEFT(-1, 0);
 const Vector DOWN(0, 1);
+const Vector NORTH_EAST(1, -1);
+const Vector NORTH_WEST(-1, -1);
+const Vector SOUTH_WEST(-1, 1);
+const Vector SOUTH_EAST(1, 1);
 
 
 Segment::Segment(const Point& first, const Point& second): first(first), second(second) {}
