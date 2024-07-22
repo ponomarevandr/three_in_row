@@ -8,7 +8,7 @@
 namespace Interface {
 
 PositionViewer::PositionViewer(const Graphics::Point& position): Item(position) {
-	game_position = Game::Position(5, 7);
+	game_position = Game::Position(5, 40);
 }
 
 void PositionViewer::draw(bool is_active) const {
@@ -49,6 +49,7 @@ void PositionViewer::processKey(int key) {
 		selected_column = (selected_column + 1) % game_position.getWidth();
 		break;
 	case KEY_ENTER:
+	case KEY_SPACE:
 		if (game_position.isTurnPossible(selected_column)) {
 			game_position.makeTurn(selected_column, player_turn);
 			player_turn = player_turn % 3 + 1;

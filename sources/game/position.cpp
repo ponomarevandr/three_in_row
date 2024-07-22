@@ -1,5 +1,7 @@
 #include "position.h"
 
+#include "debug/output.h"
+
 
 namespace Game {
 
@@ -18,15 +20,23 @@ size_t Position::getWidth() const {
 	return width;
 }
 
+size_t Position::getIndexOuter(size_t row, size_t column) const {
+	return ((width + 31) >> 5) * row + (column >> 5);
+}
+
+size_t Position::getIndexInner(size_t column) const {
+	return (column & 31) << 1;
+}
+
 uint8_t Position::getCell(size_t row, size_t column) const {
-	size_t index = ((width + 31) >> 5) * row + (column >> 5);
-	return (field[index] >> ((column & 31) << 1) & 3);
+	return (field[getIndexOuter(row, column)] >> getIndexInner(column)) & 3;
 }
 
 void Position::setCell(size_t row, size_t column, uint8_t value) {
-	size_t index = ((width + 31) >> 5) * row + (column >> 5);
-	field[index] &= ~(3 << ((column & 31) << 1));
-	field[index] |= static_cast<uint64_t>(value) << ((column & 31) << 1);
+	size_t index_outer = getIndexOuter(row, column);
+	size_t index_inner = getIndexInner(column);
+	field[index_outer] &= ~(static_cast<uint64_t>(3) << index_inner);
+	field[index_outer] |= static_cast<uint64_t>(value) << index_inner;
 }
 
 bool Position::isTurnPossible(size_t column) const {

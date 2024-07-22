@@ -5,6 +5,21 @@
 
 namespace Debug {
 
+class FlushingStream {
+private:
+	std::ofstream& fout;
+
+public:
+	explicit FlushingStream(std::ofstream& fout);
+
+	template<typename T>
+	FlushingStream& operator<<(const T& value) {
+		fout << value;
+		fout.flush();
+		return *this;
+	}
+};
+
 class Output {
 private:
 	std::ofstream fout;
@@ -12,7 +27,7 @@ private:
 public:
 	Output() = default;
 	~Output();
-	std::ofstream& getStream();
+	FlushingStream getStream();
 };
 
 extern Output output;

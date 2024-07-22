@@ -10,12 +10,15 @@ Output::~Output() {
 	}
 }
 
-std::ofstream& Output::getStream() {
+FlushingStream::FlushingStream(std::ofstream& fout): fout(fout) {}
+
+FlushingStream Output::getStream() {
 	if (!fout.is_open()) {
 		fout.open("debug.txt");
 		fout << "=============== Debug output\n\n";
+		fout.flush();
 	}
-	return fout;
+	return FlushingStream(fout);
 }
 
 Output output;

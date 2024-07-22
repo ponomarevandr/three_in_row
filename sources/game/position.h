@@ -13,6 +13,10 @@ private:
 	std::vector<uint64_t> field;
 	size_t scores[3];
 
+private:
+	size_t getIndexOuter(size_t row, size_t column) const;
+	size_t getIndexInner(size_t column) const;
+
 public:
 	Position() = default;
 	Position(size_t height, size_t width);

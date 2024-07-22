@@ -7,9 +7,8 @@
 
 int main() {
     Interface::Application application;
+    application.pushScene(std::make_unique<Interface::SceneMainMenu>(&application));
     application.pushScene(std::make_unique<Interface::SceneGame>(&application));
     application.run();
     return 0;
 }
-
-// xo▽

@@ -4,8 +4,6 @@
 
 #include <algorithm>
 
-#include "debug/output.h"
-
 
 namespace Graphics {
 
