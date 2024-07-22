@@ -8,13 +8,13 @@
 
 namespace Interface {
 
-class Game {
+class Application {
 private:
 	std::vector<std::unique_ptr<Scene>> scenes;
 
 public:
-	Game();
-	~Game();
+	Application();
+	~Application();
 	void run();
 	void pushScene(std::unique_ptr<Scene>&&);
 	void popScene();

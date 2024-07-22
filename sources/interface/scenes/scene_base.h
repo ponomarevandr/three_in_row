@@ -8,16 +8,16 @@
 
 namespace Interface {
 
-class Game;
+class Application;
 
 class Scene {
 protected:
 	std::vector<std::unique_ptr<Item>> items;
 	size_t active_index = 0;
-	Game* game;
+	Application* application;
 
 public:
-	explicit Scene(Game*);
+	explicit Scene(Application*);
 	virtual void draw() const;
 	virtual void processKey(int key);
 };

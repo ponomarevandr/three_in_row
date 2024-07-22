@@ -1,4 +1,4 @@
-#include "game.h"
+#include "application.h"
 
 #include "interface/input.h"
 #include "graphics/screen.h"
@@ -6,15 +6,15 @@
 
 namespace Interface {
 
-Game::Game() {
+Application::Application() {
 	Graphics::screenInitialize();
 }
 
-Game::~Game() {
+Application::~Application() {
 	Graphics::screenFinalize();
 }
 
-void Game::run() {
+void Application::run() {
 	while (!scenes.empty()) {
 		scenes.back()->draw();
 		Graphics::screenRefresh();
@@ -23,15 +23,15 @@ void Game::run() {
 	}
 }
 
-void Game::pushScene(std::unique_ptr<Scene>&& scene) {
+void Application::pushScene(std::unique_ptr<Scene>&& scene) {
 	scenes.push_back(std::move(scene));
 }
 
-void Game::popScene() {
+void Application::popScene() {
 	scenes.pop_back();
 }
 
-void Game::replaceScene(std::unique_ptr<Scene>&& scene) {
+void Application::replaceScene(std::unique_ptr<Scene>&& scene) {
 	popScene();
 	pushScene(std::move(scene));
 }

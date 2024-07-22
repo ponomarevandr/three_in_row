@@ -8,12 +8,15 @@ set(SOURCES
 	sources/graphics/screen.cpp
 	sources/graphics/primitives.cpp
 	sources/debug/output.cpp
-	sources/interface/game.cpp
+	sources/interface/application.cpp
 	sources/interface/input.cpp
 	sources/interface/scenes/scene_base.cpp
 	sources/interface/scenes/scene_main_menu.cpp
+	sources/interface/scenes/scene_game.cpp
 	sources/interface/items/item_base.cpp
 	sources/interface/items/button.cpp
+	sources/interface/items/position_viewer.cpp
+	sources/game/position.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)

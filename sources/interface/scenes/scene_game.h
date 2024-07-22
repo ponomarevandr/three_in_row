@@ -5,9 +5,9 @@
 
 namespace Interface {
 
-class SceneMainMenu: public Scene {
+class SceneGame: public Scene {
 public:
-	SceneMainMenu(Application*);
+	SceneGame(Application*);
 };
 
 }

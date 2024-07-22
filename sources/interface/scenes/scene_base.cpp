@@ -1,13 +1,13 @@
 #include "scene_base.h"
 
-#include "interface/game.h"
+#include "interface/application.h"
 #include "interface/input.h"
 #include "graphics/primitives.h"
 
 
 namespace Interface {
 
-Scene::Scene(Game* game): game(game) {}
+Scene::Scene(Application* application): application(application) {}
 
 void Scene::draw() const {
 	Graphics::fillScreen(Graphics::Color::BLACK);

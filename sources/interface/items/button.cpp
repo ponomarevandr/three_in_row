@@ -1,9 +1,8 @@
 #include "button.h"
 
+#include "interface/input.h"
 #include "graphics/primitives.h"
 #include "graphics/screen.h"
-
-#include <ncurses.h>
 
 
 namespace Interface {
@@ -18,7 +17,7 @@ void Button::draw(bool is_active) const {
 }
 
 void Button::processKey(int key) {
-	if (key == 10 && callback)
+	if (key == KEY_ENTER && callback)
 		callback();
 }
 
