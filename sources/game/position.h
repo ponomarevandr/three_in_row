@@ -18,7 +18,7 @@ private:
 
 private:
 	static const std::vector<Graphics::Vector> triples_center;
-	static const std::vector<Graphics::Vector> triples_edge;
+	static const std::vector<Graphics::Vector> triples_all;
 
 private:
 	size_t getIndexOuter(size_t row, size_t column) const;
