@@ -19,8 +19,8 @@ void PositionViewer::draw(bool is_active) const {
 		for (size_t j = 0; j < game_position.getWidth(); ++j) {
 			Graphics::Point current = position +
 				Graphics::Vector(j, game_position.getHeight() - i - 1);
-			Graphics::Color background_color = is_active && j == selected_column ?
-				Graphics::Color::YELLOW : Graphics::Color::WHITE;
+			Graphics::Color background_color = is_active && !game_position.isGameEnded() &&
+				j == selected_column ? Graphics::Color::YELLOW : Graphics::Color::WHITE;
 			switch (game_position.getCell(i, j)) {
 			case 0:
 				Graphics::drawSymbol(L' ', current, Graphics::Color::WHITE, background_color);
@@ -43,13 +43,42 @@ void PositionViewer::draw(bool is_active) const {
 	std::array<size_t, 3> scores = game_position.getScores();
 	drawString(std::to_wstring(scores[0]), Graphics::Point(1, game_position.getHeight() + 2),
 		Graphics::Color::BLACK, Graphics::Color::WHITE);
-	drawString(std::to_wstring(scores[1]), Graphics::Point(1, game_position.getHeight() + 4),
+	drawString(std::to_wstring(scores[1]), Graphics::Point(11, game_position.getHeight() + 2),
 		Graphics::Color::BLUE, Graphics::Color::WHITE);
-	drawString(std::to_wstring(scores[2]), Graphics::Point(1, game_position.getHeight() + 6),
+	drawString(std::to_wstring(scores[2]), Graphics::Point(21, game_position.getHeight() + 2),
 		Graphics::Color::GREEN, Graphics::Color::WHITE);
+	std::wstring message;
+	if (game_position.isGameEnded()) {
+		if (scores[0] == 1 && scores[1] == 1 && scores[2] == 1) {
+			message = L"Ничья";
+		} else {
+			if (scores[0] == 1)
+				message = L"Победа x";
+			if (scores[1] == 1)
+				message = L"Победа o";
+			if (scores[2] == 1)
+				message = L"Победа ▽";
+		}
+	} else {
+		switch (player_turn) {
+		case 1:
+			message = L"Ход x";
+			break;
+		case 2:
+			message = L"Ход o";
+			break;
+		case 3:
+			message = L"Ход ▽";
+			break;
+		}
+	}
+	drawString(message, Graphics::Point(1, game_position.getHeight() + 4),
+		Graphics::Color::BLACK, Graphics::Color::WHITE);
 }
 
 void PositionViewer::processKey(int key) {
+	if (game_position.isGameEnded())
+		return;
 	switch (key) {
 	case KEY_LEFT:
 		selected_column = (selected_column + game_position.getWidth() - 1) %

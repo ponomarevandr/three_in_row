@@ -1,7 +1,5 @@
 #include "position.h"
 
-#include "debug/output.h"
-
 
 namespace Game {
 
@@ -80,6 +78,7 @@ void Position::makeTurn(size_t column, uint8_t player) {
 
 	}
 	setCell(row, column, player);
+	--free_cells;
 }
 
 
@@ -136,6 +135,7 @@ void Position::getScoreOfTriple(const Graphics::Point& start,
 
 void Position::calculateScores() {
 	scores[0] = scores[1] = scores[2] = 1;
+	free_cells = 0;
 	for (size_t row = 0; row < height; ++row) {
 		for (size_t column = 0; column < width; ++column) {
 			for (size_t index = 0; index < triples_center.size(); index += 3) {
@@ -151,6 +151,7 @@ void Position::calculateScores() {
 					return;
 				}
 			}
+			free_cells += getCell(row, column) == 0;
 		}
 	}
 }
@@ -158,5 +159,10 @@ void Position::calculateScores() {
 std::array<size_t, 3> Position::getScores() const {
 	return scores;
 }
+
+bool Position::isGameEnded() const {
+	return free_cells == 0 || scores[0] == 0 || scores[1] == 0 || scores[2] == 0;
+}
+
 
 }

@@ -13,6 +13,7 @@ class Position {
 private:
 	size_t height = 0;
 	size_t width = 0;
+	size_t free_cells = 0;
 	std::vector<uint64_t> field;
 	std::array<size_t, 3> scores;
 
@@ -40,6 +41,7 @@ public:
 	bool isTurnPossible(size_t column) const;
 	void makeTurn(size_t column, uint8_t player);
 	std::array<size_t, 3> getScores() const;
+	bool isGameEnded() const;
 };
 
 }
