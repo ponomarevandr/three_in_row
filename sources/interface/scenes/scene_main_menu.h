@@ -7,7 +7,7 @@ namespace Interface {
 
 class SceneMainMenu: public Scene {
 public:
-	SceneMainMenu(Application*);
+	explicit SceneMainMenu(Application*);
 };
 
 }

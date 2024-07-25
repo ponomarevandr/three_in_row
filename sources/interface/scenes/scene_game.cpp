@@ -11,8 +11,8 @@
 
 namespace Interface {
 
-SceneGame::SceneGame(Application* application): Scene(application) {
-	auto position_viewer = std::make_unique<PositionViewer>(Graphics::Point(1, 1));
+SceneGame::SceneGame(Application* application): Scene(application), party(7, 13) {
+	auto position_viewer = std::make_unique<PositionViewer>(Graphics::Point(1, 1), &party);
 	items.push_back(std::move(position_viewer));
 
 	auto button_exit = std::make_unique<Button>(

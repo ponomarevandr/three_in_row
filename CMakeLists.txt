@@ -16,7 +16,9 @@ set(SOURCES
 	sources/interface/items/item_base.cpp
 	sources/interface/items/button.cpp
 	sources/interface/items/position_viewer.cpp
+	sources/interface/items/turns_viewer.cpp
 	sources/game/position.cpp
+	sources/game/party.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)

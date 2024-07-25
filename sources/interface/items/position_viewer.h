@@ -3,7 +3,7 @@
 #include "interface/items/item_base.h"
 #include "graphics/geometry.h"
 #include "graphics/screen.h"
-#include "game/position.h"
+#include "game/party.h"
 
 
 namespace Interface {
@@ -16,12 +16,11 @@ private:
 	static const Graphics::Color cell_colors_selected[2];
 
 private:
-	Game::Position game_position;
+	Game::Party* party;
 	size_t selected_column = 0;
-	uint8_t player_turn = 1;
 
 public:
-	PositionViewer(const Graphics::Point& position);
+	PositionViewer(const Graphics::Point& position, Game::Party* party);
 	void draw(bool is_active) const override;
 	void processKey(int key) override;
 };
