@@ -13,7 +13,7 @@ Button::Button(const Graphics::Point& position, int width, int height): Item(pos
 void Button::draw(bool is_active) const {
 	std::wstring edited_text = is_active ? L"< " + text + L" >" : text;
 	drawStringAtCenter(edited_text, Graphics::Rectangle(position, width, height),
-		Graphics::Color::GREEN, Graphics::Color::BLACK);
+		Graphics::Color::BLACK, Graphics::Color::GREY);
 }
 
 void Button::processKey(int key) {

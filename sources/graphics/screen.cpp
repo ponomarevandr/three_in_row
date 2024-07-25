@@ -16,9 +16,17 @@ void initializeColorPairs() {
 	init_color(COLOR_MAGENTA, 1000, 0, 1000);
 	init_color(COLOR_CYAN, 0, 1000, 1000);
 	init_color(COLOR_WHITE, 1000, 1000, 1000);
-	for (int i = 0; i < 8; ++i) {
-		for (int j = 0; j < 8; ++j) {
-			init_pair(i * 8 + j, i, j);
+	init_color(Color::GREY, 920, 920, 920);
+	init_color(Color::YELLOW_DARK, 920, 920, 0);
+	init_color(Color::UNUSED_10, 0, 0, 0);
+	init_color(Color::UNUSED_11, 0, 0, 0);
+	init_color(Color::UNUSED_12, 0, 0, 0);
+	init_color(Color::UNUSED_13, 0, 0, 0);
+	init_color(Color::UNUSED_14, 0, 0, 0);
+	init_color(Color::UNUSED_15, 0, 0, 0);
+	for (int i = 0; i < 16; ++i) {
+		for (int j = 0; j < 16; ++j) {
+			init_pair(i * 16 + j, i, j);
 		}
 	}
 }
@@ -56,7 +64,7 @@ int getScreenHeight() {
 
 
 ColorPair::ColorPair(Color foreground_color, Color background_color):
-		pair_index(foreground_color * 8 + background_color) {
+		pair_index(foreground_color * 16 + background_color) {
 	attron(COLOR_PAIR(pair_index));
 }
 

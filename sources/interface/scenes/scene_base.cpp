@@ -10,7 +10,7 @@ namespace Interface {
 Scene::Scene(Application* application): application(application) {}
 
 void Scene::draw() const {
-	Graphics::fillScreen(Graphics::Color::BLACK);
+	Graphics::fillScreen(Graphics::Color::GREY);
 	for (size_t i = 0; i < items.size(); ++i) {
 		items[i]->draw(i == active_index);
 	}
