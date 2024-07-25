@@ -3,7 +3,7 @@
 #include "interface/items/item_base.h"
 #include "graphics/geometry.h"
 #include "graphics/screen.h"
-#include "game/position.h"
+#include "game/party.h"
 
 
 namespace Interface {
@@ -13,10 +13,11 @@ private:
 	static const Graphics::Color player_colors[4];
 
 private:
-	std::vector<size_t> turns;
+	Game::Party* party;
+	size_t* explored_turn;
 
 public:
-	explicit TurnsViewer(const Graphics::Point& position);
+	TurnsViewer(const Graphics::Point& position, Game::Party* party, size_t* explored_turn);
 	void draw(bool is_active) const override;
 	void processKey(int key) override;
 };

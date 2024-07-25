@@ -17,10 +17,11 @@ private:
 
 private:
 	Game::Party* party;
+	size_t* explored_turn;
 	size_t selected_column = 0;
 
 public:
-	PositionViewer(const Graphics::Point& position, Game::Party* party);
+	PositionViewer(const Graphics::Point& position, Game::Party* party, size_t* explored_turn);
 	void draw(bool is_active) const override;
 	void processKey(int key) override;
 };

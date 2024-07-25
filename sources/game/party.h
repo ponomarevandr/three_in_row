@@ -23,8 +23,8 @@ public:
 	uint8_t getTurnPlayer() const;
 	bool isGameEnded() const;
 	const std::vector<size_t>& getTurns() const;
-	const Position& getPositionOfTurn(size_t turn) const;
-	void revertToTurn(size_t turn);
+	const Position& getPositionOfTurn(size_t index) const;
+	void revertToTurn(size_t index);
 };
 
 }
