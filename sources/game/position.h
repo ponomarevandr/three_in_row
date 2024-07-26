@@ -42,6 +42,7 @@ public:
 	void makeTurn(size_t column, uint8_t player);
 	std::array<size_t, 3> getScores() const;
 	bool isGameEnded() const;
+	bool isCellWinning(size_t row, size_t column) const;
 };
 
 }

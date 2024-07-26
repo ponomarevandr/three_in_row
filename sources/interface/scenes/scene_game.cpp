@@ -18,7 +18,8 @@ SceneGame::SceneGame(Application* application): Scene(application), party(7, 13)
 	items.push_back(std::move(position_viewer));
 
 	auto turns_viewer = std::make_unique<TurnsViewer>(
-		Graphics::Point(Graphics::getScreenWidth() - 16, 1), &party, &explored_turn);
+		Graphics::Point(Graphics::getScreenWidth() - 19, 1), Graphics::getScreenHeight() - 4,
+		&party, &explored_turn);
 	items.push_back(std::move(turns_viewer));
 
 	auto button_exit = std::make_unique<Button>(

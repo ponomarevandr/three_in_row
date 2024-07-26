@@ -48,8 +48,9 @@ void PositionViewer::draw(bool is_active) const {
 			Graphics::Point current = position +
 				Graphics::Vector(1 + j, party->getHeight() - i);
 			bool is_odd = ((i + j) & 1) != 0;
-			Graphics::Color background_color = is_active && !party->isGameEnded() &&
-				j == selected_column ? cell_colors_selected[is_odd] : cell_colors[is_odd];
+			Graphics::Color background_color = is_active &&
+				(party->isGameEnded() ? game_position.isCellWinning(i, j) : j == selected_column) ?
+				cell_colors_selected[is_odd] : cell_colors[is_odd];
 			uint8_t player = game_position.getCell(i, j);
 			Graphics::drawSymbol(player_symbols[player], current, player_colors[player],
 				background_color);
@@ -63,10 +64,13 @@ void PositionViewer::draw(bool is_active) const {
 	}
 	std::wstring message;
 	uint8_t message_player = party->getTurnPlayer();
+	Graphics::Color message_background_color = Graphics::Color::GREY;
 	if (party->isGameEnded()) {
 		if (scores[0] == 1 && scores[1] == 1 && scores[2] == 1) {
 			message = L"Ничья";
 			message_player = 0;
+			if (is_active)
+				message_background_color = Graphics::Color::YELLOW_DARK;
 		} else {
 			message = L"Победа ";
 		}
@@ -74,7 +78,7 @@ void PositionViewer::draw(bool is_active) const {
 		message = L"Ход ";
 	}
 	drawString(message, position + Graphics::Vector(1, party->getHeight() + 5),
-		Graphics::Color::BLACK, Graphics::Color::GREY);
+		Graphics::Color::BLACK, message_background_color);
 	if (message_player != 0) {
 		drawSymbol(player_symbols[message_player],
 			position + Graphics::Vector(1 + message.size(), party->getHeight() + 5),

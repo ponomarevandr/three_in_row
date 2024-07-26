@@ -165,4 +165,17 @@ bool Position::isGameEnded() const {
 }
 
 
+bool Position::isCellWinning(size_t row, size_t column) const {
+	for (size_t index = 0; index < triples_all.size(); index += 3) {
+		uint8_t player;
+		size_t score;
+		getScoreOfTriple(Graphics::Point(column, row), triples_all, index,
+			player, score);
+		if (score == 3)
+			return true;
+	}
+	return false;
+}
+
+
 }
