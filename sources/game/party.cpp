@@ -47,8 +47,8 @@ const Position& Party::getPositionOfTurn(size_t index) const {
 }
 
 void Party::revertToTurn(size_t index) {
-	history.resize(index);
-	turns.resize(index);
+	history.resize(index + 1);
+	turns.resize(index + 1);
 }
 
 }

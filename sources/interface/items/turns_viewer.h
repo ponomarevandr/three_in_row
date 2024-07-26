@@ -5,6 +5,8 @@
 #include "graphics/screen.h"
 #include "game/party.h"
 
+#include <functional>
+
 
 namespace Interface {
 
@@ -18,6 +20,7 @@ private:
 	Game::Party* party;
 	size_t* explored_turn;
 	mutable size_t first_turn_shown = 0;
+	std::function<void()> callback_revert;
 
 private:
 	void updateFirstTurnShown() const;
@@ -27,6 +30,7 @@ public:
 		size_t* explored_turn);
 	void draw(bool is_active) const override;
 	void processKey(int key) override;
+	void setCallbackRevert(std::function<void()>&&);
 };
 
 }

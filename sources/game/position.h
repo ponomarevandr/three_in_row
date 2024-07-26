@@ -4,7 +4,6 @@
 
 #include <array>
 #include <vector>
-#include <inttypes.h>
 
 
 namespace Game {

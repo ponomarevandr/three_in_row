@@ -13,10 +13,12 @@ set(SOURCES
 	sources/interface/scenes/scene_base.cpp
 	sources/interface/scenes/scene_main_menu.cpp
 	sources/interface/scenes/scene_game.cpp
+	sources/interface/scenes/scene_yes_no.cpp
 	sources/interface/items/item_base.cpp
 	sources/interface/items/button.cpp
 	sources/interface/items/position_viewer.cpp
 	sources/interface/items/turns_viewer.cpp
+	sources/interface/translation.cpp
 	sources/game/position.cpp
 	sources/game/party.cpp
 )
