@@ -21,6 +21,7 @@ set(SOURCES
 	sources/interface/translation.cpp
 	sources/game/position.cpp
 	sources/game/party.cpp
+	sources/game/estimator.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)

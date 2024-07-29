@@ -3,6 +3,7 @@
 #include "interface/input.h"
 #include "graphics/primitives.h"
 #include "game/position.h"
+#include "game/estimator.h"
 
 #include <array>
 #include <string>
@@ -41,6 +42,7 @@ void PositionViewer::draw(bool is_active) const {
 			position + Graphics::Vector(2 + i - number_string.size(), party->getHeight() + 1),
 			Graphics::Color::BLACK, cell_colors[i & 1]);
 	}
+
 	Game::Position game_position = is_active ? party->getPosition() :
 		party->getPositionOfTurn(*explored_turn);
 	for (size_t i = 0; i < party->getHeight(); ++i) {
@@ -56,12 +58,25 @@ void PositionViewer::draw(bool is_active) const {
 				background_color);
 		}
 	}
+
 	std::array<size_t, 3> scores = party->getPosition().getScores();
 	for (size_t i = 0; i < 3; ++i) {
 		drawString(std::to_wstring(scores[i]),
 			position + Graphics::Vector(1 + 10 * i, party->getHeight() + 3),
 			player_colors[i + 1], Graphics::Color::GREY);
 	}
+	Game::Estimation estimation = party->getEstimation();
+	for (size_t i = 0; i < 3; ++i) {
+		drawString(std::to_wstring(estimation.values[i]),
+			position + Graphics::Vector(1 + 10 * i, party->getHeight() + 5),
+			player_colors[i + 1], Graphics::Color::GREY);
+	}
+	if (estimation.player_winning != 0 || estimation.is_draw) {
+		drawString(L"Виден конец",
+			position + Graphics::Vector(1, party->getHeight() + 6),
+			Graphics::Color::BLACK, Graphics::Color::GREY);
+	}
+
 	std::wstring message;
 	uint8_t message_player = party->getTurnPlayer();
 	Graphics::Color message_background_color = Graphics::Color::GREY;
@@ -77,11 +92,11 @@ void PositionViewer::draw(bool is_active) const {
 	} else {
 		message = L"Ход ";
 	}
-	drawString(message, position + Graphics::Vector(1, party->getHeight() + 5),
+	drawString(message, position + Graphics::Vector(1, party->getHeight() + 8),
 		Graphics::Color::BLACK, message_background_color);
 	if (message_player != 0) {
 		drawSymbol(player_symbols[message_player],
-			position + Graphics::Vector(1 + message.size(), party->getHeight() + 5),
+			position + Graphics::Vector(1 + message.size(), party->getHeight() + 8),
 			player_colors[message_player], Graphics::Color::GREY);
 	}
 }

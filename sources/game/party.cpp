@@ -6,6 +6,9 @@ namespace Game {
 Party::Party(size_t height, size_t width) {
 	history.emplace_back(height, width);
 	turns.push_back(1 << 20);
+	Estimator estimator(history.back());
+	estimator.run();
+	estimations.push_back(estimator.getResult());
 }
 
 const Position& Party::getPosition() const {
@@ -28,6 +31,9 @@ void Party::makeTurn(size_t column) {
 	history.push_back(history.back());
 	history.back().makeTurn(column, (turns.size() + 2) % 3 + 1);
 	turns.push_back(column);
+	Estimator estimator(history.back());
+	estimator.run();
+	estimations.push_back(estimator.getResult());
 }
 
 uint8_t Party::getTurnPlayer() const {
@@ -46,9 +52,18 @@ const Position& Party::getPositionOfTurn(size_t index) const {
 	return history[index];
 }
 
+const Estimation& Party::getEstimation() const {
+	return estimations.back();
+}
+
+const Estimation& Party::getEstimationOfTurn(size_t index) const {
+	return estimations[index];
+}
+
 void Party::revertToTurn(size_t index) {
 	history.resize(index + 1);
 	turns.resize(index + 1);
+	estimations.resize(index + 1);
 }
 
 }

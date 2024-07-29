@@ -1,6 +1,7 @@
 #pragma once
 
 #include "game/position.h"
+#include "game/estimator.h"
 
 #include <array>
 #include <vector>
@@ -12,6 +13,7 @@ class Party {
 private:
 	std::vector<Position> history;
 	std::vector<size_t> turns;
+	std::vector<Estimation> estimations;
 
 public:
 	Party(size_t height, size_t width);
@@ -24,6 +26,8 @@ public:
 	bool isGameEnded() const;
 	const std::vector<size_t>& getTurns() const;
 	const Position& getPositionOfTurn(size_t index) const;
+	const Estimation& getEstimation() const;
+	const Estimation& getEstimationOfTurn(size_t index) const;
 	void revertToTurn(size_t index);
 };
 
