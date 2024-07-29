@@ -59,13 +59,14 @@ void PositionViewer::draw(bool is_active) const {
 		}
 	}
 
-	std::array<size_t, 3> scores = party->getPosition().getScores();
+	std::array<size_t, 3> scores = game_position.getScores();
 	for (size_t i = 0; i < 3; ++i) {
 		drawString(std::to_wstring(scores[i]),
 			position + Graphics::Vector(1 + 10 * i, party->getHeight() + 3),
 			player_colors[i + 1], Graphics::Color::GREY);
 	}
-	Game::Estimation estimation = party->getEstimation();
+	Game::Estimation estimation = is_active ? party->getEstimation() :
+		party->getEstimationOfTurn(*explored_turn);
 	for (size_t i = 0; i < 3; ++i) {
 		drawString(std::to_wstring(estimation.values[i]),
 			position + Graphics::Vector(1 + 10 * i, party->getHeight() + 5),
