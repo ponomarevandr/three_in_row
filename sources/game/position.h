@@ -17,6 +17,7 @@ private:
 	std::array<size_t, 3> scores;
 
 private:
+	static const size_t triple_scores[4];
 	static const std::vector<Graphics::Vector> triples_center;
 	static const std::vector<Graphics::Vector> triples_all;
 

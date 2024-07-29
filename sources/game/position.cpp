@@ -61,17 +61,18 @@ void Position::makeTurn(size_t column, uint8_t player) {
 		if (triple_player == 4)
 			continue;
 		if (triple_player == 0) {
-			++scores[player - 1];
+			scores[player - 1] += triple_scores[1];
 			continue;
 		}
 		if (triple_player == player) {
-			if (score == 2) {
+			if (score == triple_scores[1]) {
+				scores[player - 1] -= triple_scores[1];
+				scores[player - 1] += triple_scores[2];
+				continue;
+			} else {
 				scores[0] = scores[1] = scores[2] = 0;
 				scores[player - 1] = 1;
 				break;
-			} else {
-				++scores[player - 1];
-				continue;
 			}
 		}
 		scores[triple_player - 1] -= score;
@@ -81,6 +82,8 @@ void Position::makeTurn(size_t column, uint8_t player) {
 	--free_cells;
 }
 
+
+const size_t Position::triple_scores[4] = { 0, 1, 3, 100 };
 
 const std::vector<Graphics::Vector> Position::triples_center = {
 	Graphics::LEFT, Graphics::Vector(), Graphics::RIGHT,
@@ -108,12 +111,13 @@ void Position::getScoreOfTriple(const Graphics::Point& start,
 		const std::vector<Graphics::Vector>& triples, size_t index,
 		uint8_t& player, size_t& score) const {
 	player = 0;
-	score = 0;
+	score = triple_scores[0];
+	size_t amount = 0;
 	for (size_t i = index; i < index + 3; ++i) {
 		Graphics::Point current = start + triples[i];
 		if (current.x < 0 || current.y < 0 || current.x >= width || current.y >= height) {
 			player = 4;
-			score = 0;
+			score = triple_scores[0];
 			return;
 		}
 		uint8_t current_player = getCell(current.y, current.x);
@@ -121,16 +125,14 @@ void Position::getScoreOfTriple(const Graphics::Point& start,
 			continue;
 		if (player == 0) {
 			player = current_player;
-			score = 1;
-			continue;
-		}
-		if (player != current_player) {
+		} else if (player != current_player) {
 			player = 4;
-			score = 0;
+			score = triple_scores[0];
 			return;
 		}
-		++score;
+		++amount;
 	}
+	score = triple_scores[amount];
 }
 
 void Position::calculateScores() {
@@ -145,7 +147,7 @@ void Position::calculateScores() {
 					player, score);
 				if (player != 0 && player != 4)
 					scores[player - 1] += score;
-				if (score == 3) {
+				if (score == triple_scores[3]) {
 					scores[0] = scores[1] = scores[2] = 0;
 					scores[player - 1] = 1;
 					return;
@@ -171,7 +173,7 @@ bool Position::isCellWinning(size_t row, size_t column) const {
 		size_t score;
 		getScoreOfTriple(Graphics::Point(column, row), triples_all, index,
 			player, score);
-		if (score == 3)
+		if (score == triple_scores[3])
 			return true;
 	}
 	return false;
