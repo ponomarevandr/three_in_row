@@ -6,7 +6,7 @@ namespace Game {
 Party::Party(size_t height, size_t width) {
 	history.emplace_back(height, width);
 	turns.push_back(1 << 20);
-	Estimator estimator(history.back());
+	Estimator estimator(history.back(), getPlayerTurn());
 	estimator.run();
 	estimations.push_back(estimator.getResult());
 }
@@ -28,15 +28,16 @@ bool Party::isTurnPossible(size_t column) const {
 }
 
 void Party::makeTurn(size_t column) {
+	size_t player_turn = getPlayerTurn();
 	history.push_back(history.back());
-	history.back().makeTurn(column, (turns.size() + 2) % 3 + 1);
+	history.back().makeTurn(column, player_turn);
 	turns.push_back(column);
-	Estimator estimator(history.back());
+	Estimator estimator(history.back(), getPlayerTurn());
 	estimator.run();
 	estimations.push_back(estimator.getResult());
 }
 
-uint8_t Party::getTurnPlayer() const {
+uint8_t Party::getPlayerTurn() const {
 	return (turns.size() + 1 + !history.back().isGameEnded()) % 3 + 1;
 }
 
