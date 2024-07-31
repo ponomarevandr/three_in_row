@@ -80,7 +80,7 @@ void PositionViewer::draw(bool is_active) const {
 	}
 
 	std::wstring message;
-	uint8_t message_player = party->getPlayerTurn();
+	uint8_t message_player = party->isGameEnded() ? party->getPlayerWon() : party->getPlayerTurn();
 	Graphics::Color message_background_color = Graphics::Color::GREY;
 	if (party->isGameEnded()) {
 		if (scores[0] == 1 && scores[1] == 1 && scores[2] == 1) {

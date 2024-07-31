@@ -24,9 +24,9 @@ private:
 private:
 	size_t getIndexOuter(size_t row, size_t column) const;
 	size_t getIndexInner(size_t column) const;
-	void getScoreOfTriple(const Graphics::Point& start,
+	void getQuantityOfTriple(const Graphics::Point& start,
 		const std::vector<Graphics::Vector>& triples, size_t index,
-		uint8_t& player,size_t& score) const;
+		uint8_t& player,size_t& quantity) const;
 	void calculateScores();
 
 public:
@@ -42,6 +42,7 @@ public:
 	void makeTurn(size_t column, uint8_t player);
 	std::array<size_t, 3> getScores() const;
 	bool isGameEnded() const;
+	uint8_t getPlayerWon() const;
 	bool isCellWinning(size_t row, size_t column) const;
 };
 

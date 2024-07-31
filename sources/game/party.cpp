@@ -30,9 +30,8 @@ bool Party::isTurnPossible(size_t column) const {
 }
 
 void Party::makeTurn(size_t column) {
-	size_t player_turn = getPlayerTurn();
 	history.push_back(history.back());
-	history.back().makeTurn(column, player_turn);
+	history.back().makeTurn(column, getPlayerTurn());
 	turns.push_back(column);
 	EstimatorNaive estimator(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
 	estimator.run();
@@ -40,11 +39,15 @@ void Party::makeTurn(size_t column) {
 }
 
 uint8_t Party::getPlayerTurn() const {
-	return (turns.size() + 1 + !history.back().isGameEnded()) % 3 + 1;
+	return (turns.size() + 2) % 3 + 1;
 }
 
 bool Party::isGameEnded() const {
 	return history.back().isGameEnded();
+}
+
+uint8_t Party::getPlayerWon() const {
+	return history.back().getPlayerWon();
 }
 
 const std::vector<size_t>& Party::getTurns() const {

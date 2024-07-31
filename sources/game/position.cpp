@@ -55,27 +55,18 @@ void Position::makeTurn(size_t column, uint8_t player) {
 	}
 	for (size_t index = 0; index < triples_all.size(); index += 3) {
 		uint8_t triple_player;
-		size_t score;
-		getScoreOfTriple(Graphics::Point(column, row), triples_all, index,
-			triple_player, score);
+		size_t quantity;
+		getQuantityOfTriple(Graphics::Point(column, row), triples_all, index,
+			triple_player, quantity);
 		if (triple_player == 4)
 			continue;
 		if (triple_player == 0) {
 			scores[player - 1] += triple_scores[1];
 			continue;
 		}
-		if (triple_player == player) {
-			if (score == triple_scores[1]) {
-				scores[player - 1] -= triple_scores[1];
-				scores[player - 1] += triple_scores[2];
-				continue;
-			} else {
-				scores[0] = scores[1] = scores[2] = 0;
-				scores[player - 1] = 1;
-				break;
-			}
-		}
-		scores[triple_player - 1] -= score;
+		if (triple_player == player)
+			scores[player - 1] += triple_scores[quantity + 1];
+		scores[triple_player - 1] -= triple_scores[quantity];
 
 	}
 	setCell(row, column, player);
@@ -83,7 +74,7 @@ void Position::makeTurn(size_t column, uint8_t player) {
 }
 
 
-const size_t Position::triple_scores[4] = { 0, 1, 3, 100 };
+const size_t Position::triple_scores[4] = { 0, 1, 3, 1'000'000'000 };
 
 const std::vector<Graphics::Vector> Position::triples_center = {
 	Graphics::LEFT, Graphics::Vector(), Graphics::RIGHT,
@@ -107,17 +98,16 @@ const std::vector<Graphics::Vector> Position::triples_all = {
 	Graphics::Vector(), Graphics::SOUTH_EAST, Graphics::SOUTH_EAST * 2
 };
 
-void Position::getScoreOfTriple(const Graphics::Point& start,
+void Position::getQuantityOfTriple(const Graphics::Point& start,
 		const std::vector<Graphics::Vector>& triples, size_t index,
-		uint8_t& player, size_t& score) const {
+		uint8_t& player, size_t& quantity) const {
 	player = 0;
-	score = triple_scores[0];
-	size_t amount = 0;
+	quantity = 0;
 	for (size_t i = index; i < index + 3; ++i) {
 		Graphics::Point current = start + triples[i];
 		if (current.x < 0 || current.y < 0 || current.x >= width || current.y >= height) {
 			player = 4;
-			score = triple_scores[0];
+			quantity = 0;
 			return;
 		}
 		uint8_t current_player = getCell(current.y, current.x);
@@ -127,12 +117,11 @@ void Position::getScoreOfTriple(const Graphics::Point& start,
 			player = current_player;
 		} else if (player != current_player) {
 			player = 4;
-			score = triple_scores[0];
+			quantity = 0;
 			return;
 		}
-		++amount;
+		++quantity;
 	}
-	score = triple_scores[amount];
 }
 
 void Position::calculateScores() {
@@ -142,16 +131,11 @@ void Position::calculateScores() {
 		for (size_t column = 0; column < width; ++column) {
 			for (size_t index = 0; index < triples_center.size(); index += 3) {
 				uint8_t player;
-				size_t score;
-				getScoreOfTriple(Graphics::Point(column, row), triples_center, index,
-					player, score);
+				size_t quantity;
+				getQuantityOfTriple(Graphics::Point(column, row), triples_center, index,
+					player, quantity);
 				if (player != 0 && player != 4)
-					scores[player - 1] += score;
-				if (score == triple_scores[3]) {
-					scores[0] = scores[1] = scores[2] = 0;
-					scores[player - 1] = 1;
-					return;
-				}
+					scores[player - 1] += triple_scores[quantity];
 			}
 			free_cells += getCell(row, column) == 0;
 		}
@@ -163,17 +147,26 @@ std::array<size_t, 3> Position::getScores() const {
 }
 
 bool Position::isGameEnded() const {
-	return free_cells == 0 || scores[0] == 0 || scores[1] == 0 || scores[2] == 0;
+	return free_cells == 0 || scores[0] >= triple_scores[3] || scores[1] >= triple_scores[3] ||
+		scores[2] >= triple_scores[3];
+}
+
+uint8_t Position::getPlayerWon() const {
+	for (size_t i = 0; i < 3; ++i) {
+		if (scores[i] >= triple_scores[3])
+			return i + 1;
+	}
+	return 0;
 }
 
 
 bool Position::isCellWinning(size_t row, size_t column) const {
 	for (size_t index = 0; index < triples_all.size(); index += 3) {
 		uint8_t player;
-		size_t score;
-		getScoreOfTriple(Graphics::Point(column, row), triples_all, index,
-			player, score);
-		if (score == triple_scores[3])
+		size_t quantity;
+		getQuantityOfTriple(Graphics::Point(column, row), triples_all, index,
+			player, quantity);
+		if (quantity == 3)
 			return true;
 	}
 	return false;

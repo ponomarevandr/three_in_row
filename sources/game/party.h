@@ -25,6 +25,7 @@ public:
 	void makeTurn(size_t column);
 	uint8_t getPlayerTurn() const;
 	bool isGameEnded() const;
+	uint8_t getPlayerWon() const;
 	const std::vector<size_t>& getTurns() const;
 	const Position& getPositionOfTurn(size_t index) const;
 	const Estimation& getEstimation() const;

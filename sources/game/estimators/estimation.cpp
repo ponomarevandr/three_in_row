@@ -11,14 +11,7 @@ Estimation::Estimation(const Position& position) {
 	}
 	if (!position.isGameEnded())
 		return;
-	if (scores[0] == 1 && scores[1] == 1 && scores[2] == 1) {
-		player_winning = 0;
-	} else {
-		for (size_t i = 0; i < 3; ++i) {
-			if (scores[i] != 0)
-				player_winning = i + 1;
-		}
-	}
+	player_winning = position.getPlayerWon();
 }
 
 Estimation aggregateForPlayer(Estimation&& first, Estimation&& second, uint8_t player) {
