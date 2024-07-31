@@ -40,6 +40,7 @@ public:
 	void setCell(size_t row, size_t column, uint8_t value);
 	bool isTurnPossible(size_t column) const;
 	void makeTurn(size_t column, uint8_t player);
+	void unmakeTurn(size_t column);
 	std::array<size_t, 3> getScores() const;
 	bool isGameEnded() const;
 	uint8_t getPlayerWon() const;

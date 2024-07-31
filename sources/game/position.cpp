@@ -73,6 +73,32 @@ void Position::makeTurn(size_t column, uint8_t player) {
 	--free_cells;
 }
 
+void Position::unmakeTurn(size_t column) {
+	size_t row = 0;
+	while (row + 1 < height && getCell(row + 1, column) != 0) {
+		++row;
+	}
+	uint8_t player = getCell(row, column);
+	setCell(row, column, 0);
+	++free_cells;
+	for (size_t index = 0; index < triples_all.size(); index += 3) {
+		uint8_t triple_player;
+		size_t quantity;
+		getQuantityOfTriple(Graphics::Point(column, row), triples_all, index,
+			triple_player, quantity);
+		if (triple_player == 4)
+			continue;
+		if (triple_player == 0) {
+			scores[player - 1] -= triple_scores[1];
+			continue;
+		}
+		if (triple_player == player)
+			scores[player - 1] -= triple_scores[quantity + 1];
+		scores[triple_player - 1] += triple_scores[quantity];
+
+	}
+}
+
 
 const size_t Position::triple_scores[4] = { 0, 1, 3, 1'000'000'000 };
 

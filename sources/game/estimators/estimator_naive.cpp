@@ -6,8 +6,9 @@ namespace Game {
 EstimatorNaive::EstimatorNaive(const Position& position, uint8_t player_turn, size_t depth_max):
 	Estimator(position, player_turn, depth_max) {}
 
-Estimation EstimatorNaive::estimatePosition(const Position& position, uint8_t player_turn,
+Estimation EstimatorNaive::estimatePosition(Position& position, uint8_t player_turn,
 		size_t depth) {
+	++nodes_visited;
 	if (depth == 0 || position.isGameEnded())
 		return Estimation(position);
 	size_t column = 0;
@@ -33,6 +34,10 @@ Estimation EstimatorNaive::estimatePosition(const Position& position, uint8_t pl
 	if (result.player_winning != 4)
 		++result.turns_till_end;
 	return result;
+}
+
+std::string EstimatorNaive::getDebugName() const {
+	return "Naive recursive estimator";
 }
 
 }
