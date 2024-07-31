@@ -100,7 +100,7 @@ void Position::unmakeTurn(size_t column) {
 }
 
 
-const size_t Position::triple_scores[4] = { 0, 1, 3, 1'000'000'000 };
+const size_t Position::triple_scores[4] = { 0, 1, 3, 100'000'000 };
 
 const std::vector<Graphics::Vector> Position::triples_center = {
 	Graphics::LEFT, Graphics::Vector(), Graphics::RIGHT,
