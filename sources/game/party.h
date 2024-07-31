@@ -1,7 +1,7 @@
 #pragma once
 
 #include "game/position.h"
-#include "game/estimator.h"
+#include "game/estimators/estimation.h"
 
 #include <array>
 #include <vector>
@@ -11,6 +11,7 @@ namespace Game {
 
 class Party {
 private:
+	static constexpr size_t ESTIMATION_DEPTH = 5;
 	std::vector<Position> history;
 	std::vector<size_t> turns;
 	std::vector<Estimation> estimations;

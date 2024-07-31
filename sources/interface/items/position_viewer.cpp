@@ -3,7 +3,7 @@
 #include "interface/input.h"
 #include "graphics/primitives.h"
 #include "game/position.h"
-#include "game/estimator.h"
+#include "game/estimators/estimation.h"
 
 #include <array>
 #include <string>
