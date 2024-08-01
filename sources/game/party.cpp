@@ -2,6 +2,7 @@
 
 #include "game/estimators/estimator_naive.h"
 #include "game/estimators/estimator_retracting.h"
+#include "game/estimators/estimator_pruning.h"
 
 
 namespace Game {
@@ -9,7 +10,7 @@ namespace Game {
 Party::Party(size_t height, size_t width) {
 	history.emplace_back(height, width);
 	turns.push_back(1 << 20);
-	EstimatorNaive estimator(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
+	EstimatorPruning estimator(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
 	estimator.run();
 	estimations.push_back(estimator.getResult());
 }
@@ -34,7 +35,7 @@ void Party::makeTurn(size_t column) {
 	history.push_back(history.back());
 	history.back().makeTurn(column, getPlayerTurn());
 	turns.push_back(column);
-	EstimatorNaive estimator(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
+	EstimatorPruning estimator(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
 	estimator.run();
 	estimations.push_back(estimator.getResult());
 }

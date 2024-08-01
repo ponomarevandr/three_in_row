@@ -12,6 +12,10 @@ Estimation::Estimation(const Position& position) {
 	if (!position.isGameEnded())
 		return;
 	player_winning = position.getPlayerWon();
+	if (player_winning != 0) {
+		values[0] = values[1] = values[2] = 0;
+		values[player_winning - 1] = 1.0f;
+	}
 }
 
 Estimation aggregateForPlayer(Estimation&& first, Estimation&& second, uint8_t player) {
