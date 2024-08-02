@@ -4,15 +4,21 @@
 #include "game/estimators/estimator_retracting.h"
 #include "game/estimators/estimator_pruning.h"
 
+#include "debug/output.h"
+
 
 namespace Game {
 
 Party::Party(size_t height, size_t width) {
 	history.emplace_back(height, width);
 	turns.push_back(1 << 20);
+	//EstimatorNaive estimator_check(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
+	//estimator_check.run();
 	EstimatorPruning estimator(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
 	estimator.run();
 	estimations.push_back(estimator.getResult());
+	//if (estimator_check.getResult() != estimator.getResult())
+	//	Debug::output.getStream() << "!\n";
 }
 
 const Position& Party::getPosition() const {
@@ -35,9 +41,13 @@ void Party::makeTurn(size_t column) {
 	history.push_back(history.back());
 	history.back().makeTurn(column, getPlayerTurn());
 	turns.push_back(column);
+	//EstimatorNaive estimator_check(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
+	//estimator_check.run();
 	EstimatorPruning estimator(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
 	estimator.run();
 	estimations.push_back(estimator.getResult());
+	//if (estimator_check.getResult() != estimator.getResult())
+	//	Debug::output.getStream() << "!\n";
 }
 
 uint8_t Party::getPlayerTurn() const {

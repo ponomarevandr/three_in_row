@@ -49,4 +49,13 @@ Estimation aggregateForPlayer(Estimation&& first, Estimation&& second, uint8_t p
 	}
 }
 
+bool Estimation::operator==(const Estimation& other) const {
+	return values == other.values && player_winning == other.player_winning &&
+		turns_till_end == other.turns_till_end;
+}
+
+bool Estimation::operator!=(const Estimation& other) const {
+	return !(*this == other);
+}
+
 }
