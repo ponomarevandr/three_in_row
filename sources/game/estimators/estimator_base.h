@@ -26,7 +26,7 @@ protected:
 protected:
 	virtual Estimation estimatePosition(Position& position, uint8_t player_turn, size_t depth) = 0;
 	virtual std::string getDebugName() const;
-	void debugPrint() const;
+	virtual void debugPrint() const;
 
 public:
 	Estimator(const Position& position, uint8_t player_turn, size_t depth_max);

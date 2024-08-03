@@ -5,6 +5,7 @@
 #include "game/estimators/estimator_base.h"
 
 #include <array>
+#include <vector>
 #include <string>
 
 
@@ -23,7 +24,8 @@ protected:
 
 protected:
 	Estimation estimatePosition(Position& position, uint8_t player_turn, size_t depth) override;
-	Estimation estimatePositionPruning(Position& position, uint8_t player_turn, size_t depth,
+	std::vector<Position> getPositionsNext(const Position& position, uint8_t player_turn) const;
+	Estimation estimatePositionPruning(const Position& position, uint8_t player_turn, size_t depth,
 		const std::array<float, 3>& values_of_max);
 	std::string getDebugName() const override;
 

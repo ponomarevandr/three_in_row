@@ -16,16 +16,8 @@ Estimation EstimatorPruning::estimatePosition(Position& position, uint8_t player
 
 EstimatorPruning::Comparator::Comparator(uint8_t player): player(player) {}
 
-bool EstimatorPruning::Comparator::operator()(const Position& first,
-		const Position& second) const {
-	return Estimation(first).values[player - 1] > Estimation(second).values[player - 1];
-}
-
-Estimation EstimatorPruning::estimatePositionPruning(Position& position, uint8_t player_turn,
-		size_t depth, const std::array<float, 3>& values_of_max) {
-	++nodes_visited;
-	if (depth == 0 || position.isGameEnded())
-		return Estimation(position);
+std::vector<Position> EstimatorPruning::getPositionsNext(const Position& position,
+		uint8_t player_turn) const {
 	size_t column = 0;
 	std::vector<Position> positions_next;
 	while (true) {
@@ -38,8 +30,21 @@ Estimation EstimatorPruning::estimatePositionPruning(Position& position, uint8_t
 		positions_next.back().makeTurn(column, player_turn);
 		++column;
 	}
-	std::sort(positions_next.begin(), positions_next.end(), Comparator(player_turn));
+	return positions_next;
+}
 
+bool EstimatorPruning::Comparator::operator()(const Position& first,
+		const Position& second) const {
+	return Estimation(first).values[player - 1] > Estimation(second).values[player - 1];
+}
+
+Estimation EstimatorPruning::estimatePositionPruning(const Position& position, uint8_t player_turn,
+		size_t depth, const std::array<float, 3>& values_of_max) {
+	++nodes_visited;
+	if (depth == 0 || position.isGameEnded())
+		return Estimation(position);
+	std::vector<Position> positions_next = getPositionsNext(position, player_turn);
+	std::sort(positions_next.begin(), positions_next.end(), Comparator(player_turn));
 	Estimation result;
 	bool has_started = false;
 	std::array<float, 3> values_of_max_copy = values_of_max;
