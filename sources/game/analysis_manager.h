@@ -20,10 +20,13 @@ private:
 	Estimation result;
 	Clock::time_point time_beginning;
 	Clock::time_point time_end;
-	std::vector<size_t> times_ms_runs;
+	std::vector<size_t> times_ms_pruning;
+	std::vector<size_t> times_ms_table;
+	bool is_pruning_running;
+	bool is_table_running;
 
 private:
-	size_t getNextTimeMsApproximate() const;
+	static size_t getNextTimeMsApproximate(const std::vector<size_t>& times_ms);
 	void debugPrint() const;
 
 public:

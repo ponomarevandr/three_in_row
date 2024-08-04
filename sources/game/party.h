@@ -11,7 +11,6 @@ namespace Game {
 
 class Party {
 private:
-	static constexpr size_t ESTIMATION_DEPTH = 7;
 	std::vector<Position> history;
 	std::vector<size_t> turns;
 	std::vector<Estimation> estimations;
