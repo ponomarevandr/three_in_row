@@ -3,6 +3,7 @@
 #include "game/estimators/estimator_naive.h"
 #include "game/estimators/estimator_retracting.h"
 #include "game/estimators/estimator_pruning.h"
+#include "game/estimators/estimator_table.h"
 
 #include "debug/output.h"
 
@@ -14,7 +15,7 @@ Party::Party(size_t height, size_t width) {
 	turns.push_back(1 << 20);
 	//EstimatorNaive estimator_check(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
 	//estimator_check.run();
-	EstimatorPruning estimator(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
+	EstimatorTable estimator(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
 	estimator.run();
 	estimations.push_back(estimator.getResult());
 	//if (estimator_check.getResult() != estimator.getResult())
@@ -43,7 +44,7 @@ void Party::makeTurn(size_t column) {
 	turns.push_back(column);
 	//EstimatorNaive estimator_check(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
 	//estimator_check.run();
-	EstimatorPruning estimator(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
+	EstimatorTable estimator(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
 	estimator.run();
 	estimations.push_back(estimator.getResult());
 	//if (estimator_check.getResult() != estimator.getResult())

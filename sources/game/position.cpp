@@ -17,6 +17,10 @@ std::vector<uint64_t> Position::takeField() {
 	return std::move(field);
 }
 
+const std::vector<uint64_t>& Position::getField() const {
+	return field;
+}
+
 size_t Position::getHeight() const {
 	return height;
 }

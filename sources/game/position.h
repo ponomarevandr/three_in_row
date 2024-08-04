@@ -34,6 +34,7 @@ public:
 	Position(size_t height, size_t width);
 	Position(size_t height, size_t width, std::vector<uint64_t>&& field);
 	std::vector<uint64_t> takeField();
+	const std::vector<uint64_t>& getField() const;
 	size_t getHeight() const;
 	size_t getWidth() const;
 	uint8_t getCell(size_t row, size_t column) const;

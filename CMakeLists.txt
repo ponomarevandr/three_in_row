@@ -26,6 +26,7 @@ set(SOURCES
 	sources/game/estimators/estimator_naive.cpp
 	sources/game/estimators/estimator_retracting.cpp
 	sources/game/estimators/estimator_pruning.cpp
+	sources/game/estimators/estimator_table.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
