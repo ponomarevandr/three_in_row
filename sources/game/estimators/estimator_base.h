@@ -14,7 +14,7 @@ protected:
 	using Clock = std::chrono::steady_clock;
 
 protected:
-	static constexpr bool DEBUG = true;
+	static constexpr bool DEBUG = false;
 	const Position& position_start;
 	uint8_t player_turn_start;
 	size_t depth_max;
@@ -32,6 +32,7 @@ public:
 	Estimator(const Position& position, uint8_t player_turn, size_t depth_max);
 	void run();
 	const Estimation& getResult() const;
+	size_t getTimeMsElapsed() const;
 };
 
 }

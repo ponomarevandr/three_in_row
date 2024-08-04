@@ -1,11 +1,6 @@
 #include "party.h"
 
-#include "game/estimators/estimator_naive.h"
-#include "game/estimators/estimator_retracting.h"
-#include "game/estimators/estimator_pruning.h"
-#include "game/estimators/estimator_table.h"
-
-#include "debug/output.h"
+#include "game/analysis_manager.h"
 
 
 namespace Game {
@@ -13,13 +8,9 @@ namespace Game {
 Party::Party(size_t height, size_t width) {
 	history.emplace_back(height, width);
 	turns.push_back(1 << 20);
-	//EstimatorNaive estimator_check(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
-	//estimator_check.run();
-	EstimatorTable estimator(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
-	estimator.run();
-	estimations.push_back(estimator.getResult());
-	//if (estimator_check.getResult() != estimator.getResult())
-	//	Debug::output.getStream() << "!\n";
+	AnalysisManager analysis_manager(history.back(), getPlayerTurn(), 500);
+	analysis_manager.run();
+	estimations.push_back(analysis_manager.getResult());
 }
 
 const Position& Party::getPosition() const {
@@ -42,13 +33,9 @@ void Party::makeTurn(size_t column) {
 	history.push_back(history.back());
 	history.back().makeTurn(column, getPlayerTurn());
 	turns.push_back(column);
-	//EstimatorNaive estimator_check(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
-	//estimator_check.run();
-	EstimatorTable estimator(history.back(), getPlayerTurn(), ESTIMATION_DEPTH);
-	estimator.run();
-	estimations.push_back(estimator.getResult());
-	//if (estimator_check.getResult() != estimator.getResult())
-	//	Debug::output.getStream() << "!\n";
+	AnalysisManager analysis_manager(history.back(), getPlayerTurn(), 500);
+	analysis_manager.run();
+	estimations.push_back(analysis_manager.getResult());
 }
 
 uint8_t Party::getPlayerTurn() const {

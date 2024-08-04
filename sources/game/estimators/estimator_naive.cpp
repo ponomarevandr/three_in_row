@@ -22,11 +22,11 @@ Estimation EstimatorNaive::estimatePosition(Position& position, uint8_t player_t
 			break;
 		Position position_next = position;
 		position_next.makeTurn(column, player_turn);
-		Estimation current = estimatePosition(position_next, player_turn % 3 + 1, depth - 1);
+		Estimation estimation = estimatePosition(position_next, player_turn % 3 + 1, depth - 1);
 		if (has_started) {
-			result = aggregateForPlayer(std::move(result), std::move(current), player_turn);
+			result = aggregateForPlayer(std::move(result), std::move(estimation), player_turn);
 		} else {
-			result = std::move(current);
+			result = std::move(estimation);
 			has_started = true;
 		}
 		++column;

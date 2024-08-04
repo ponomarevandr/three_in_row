@@ -23,6 +23,12 @@ const Estimation& Estimator::getResult() const {
 	return result;
 }
 
+size_t Estimator::getTimeMsElapsed() const {
+	size_t time_ms =
+		std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_beginning).count();
+	return time_ms;
+}
+
 std::string Estimator::getDebugName() const {
 	return "Unspecified estimator";
 }
