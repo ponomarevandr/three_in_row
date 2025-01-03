@@ -2,6 +2,7 @@
 
 #include "graphics/geometry.h"
 
+#include <cstdint>
 #include <array>
 #include <vector>
 

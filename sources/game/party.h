@@ -3,6 +3,7 @@
 #include "game/position.h"
 #include "game/estimators/estimation.h"
 
+#include <cstdint>
 #include <array>
 #include <vector>
 

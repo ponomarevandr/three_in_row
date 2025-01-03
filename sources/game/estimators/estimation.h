@@ -2,6 +2,7 @@
 
 #include "game/position.h"
 
+#include <cstdint>
 #include <array>
 
 
