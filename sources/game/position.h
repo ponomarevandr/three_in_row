@@ -9,6 +9,9 @@
 
 namespace Game {
 
+static constexpr uint8_t OUTCOME_DRAW = 0;
+static constexpr uint8_t OUTCOME_UNKNOWN = 4;
+
 class Position {
 private:
 	size_t height = 0;
@@ -18,7 +21,12 @@ private:
 	std::array<size_t, 3> scores;
 
 private:
-	static const size_t triple_scores[4];
+	static constexpr uint8_t NO_PLAYER = 0;
+	static constexpr uint8_t SEVERAL_PLAYERS = 4;
+	static constexpr uint8_t INVALID_TRIPLE = 5;
+
+private:
+	static const size_t combination_scores[4];
 	static const std::vector<Graphics::Vector> triples_center;
 	static const std::vector<Graphics::Vector> triples_all;
 
@@ -33,7 +41,6 @@ private:
 public:
 	Position() = default;
 	Position(size_t height, size_t width);
-	Position(size_t height, size_t width, std::vector<uint64_t>&& field);
 	std::vector<uint64_t> takeField();
 	const std::vector<uint64_t>& getField() const;
 	size_t getHeight() const;
@@ -42,10 +49,10 @@ public:
 	void setCell(size_t row, size_t column, uint8_t value);
 	bool isTurnPossible(size_t column) const;
 	void makeTurn(size_t column, uint8_t player);
+	Position makeTurnCopy(size_t column, uint8_t player) const;
 	void unmakeTurn(size_t column);
 	std::array<size_t, 3> getScores() const;
-	bool isGameEnded() const;
-	uint8_t getPlayerWon() const;
+	uint8_t getOutcome() const;
 	bool isCellWinning(size_t row, size_t column) const;
 };
 

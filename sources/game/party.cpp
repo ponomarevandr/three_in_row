@@ -43,11 +43,11 @@ uint8_t Party::getPlayerTurn() const {
 }
 
 bool Party::isGameEnded() const {
-	return history.back().isGameEnded();
+	return history.back().getOutcome() != OUTCOME_UNKNOWN;
 }
 
 uint8_t Party::getPlayerWon() const {
-	return history.back().getPlayerWon();
+	return history.back().getOutcome();
 }
 
 const std::vector<size_t>& Party::getTurns() const {

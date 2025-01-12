@@ -41,7 +41,7 @@ bool EstimatorPruning::Comparator::operator()(const Position& first,
 Estimation EstimatorPruning::estimatePositionPruning(const Position& position, uint8_t player_turn,
 		size_t depth, const std::array<float, 3>& values_of_max) {
 	++nodes_visited;
-	if (depth == 0 || position.isGameEnded())
+	if (depth == 0 || position.getOutcome() != OUTCOME_UNKNOWN)
 		return Estimation(position);
 	std::vector<Position> positions_next = getPositionsNext(position, player_turn);
 	std::sort(positions_next.begin(), positions_next.end(), Comparator(player_turn));
@@ -64,7 +64,7 @@ Estimation EstimatorPruning::estimatePositionPruning(const Position& position, u
 		if (values_of_max[(player_turn + 1) % 3] + result.values[player_turn - 1] > 1.0)
 			break;
 	}
-	if (result.player_winning != 4)
+	if (result.outcome != OUTCOME_UNKNOWN)
 		++result.turns_till_end;
 	return result;
 }

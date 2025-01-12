@@ -73,6 +73,7 @@ struct Rectangle {
 	int getWidth() const;
 	int getHeight() const;
 	Point getCenter() const;
+	bool isPointInside(const Point&) const;
 };
 
 }

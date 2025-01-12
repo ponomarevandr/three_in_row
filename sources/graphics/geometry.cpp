@@ -180,4 +180,10 @@ Point Rectangle::getCenter() const {
 	return top_left + (bottom_right - top_left) / 2;
 }
 
+bool Rectangle::isPointInside(const Point& point) const {
+	return
+		top_left.x <= point.x && point.x <= bottom_right.x &&
+		top_left.y <= point.y && point.y <= bottom_right.y;
+}
+
 }

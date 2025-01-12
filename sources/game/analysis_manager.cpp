@@ -1,5 +1,6 @@
 #include "analysis_manager.h"
 
+#include "game/position.h"
 #include "game/estimators/estimator_pruning.h"
 #include "game/estimators/estimator_table.h"
 #include "debug/output.h"
@@ -28,7 +29,7 @@ void AnalysisManager::run() {
 	is_pruning_running = is_table_running = true;
 	size_t times_ms_sum = 0;
 	size_t depth = 0;
-	while ((is_pruning_running || is_table_running) && result.player_winning == 4) {
+	while ((is_pruning_running || is_table_running) && result.outcome == OUTCOME_UNKNOWN) {
 		is_pruning_running &= depth < 2 ||
 			times_ms_sum + getNextTimeMsApproximate(times_ms_pruning) <= time_ms_target;
 		if (is_pruning_running) {

@@ -72,8 +72,8 @@ void PositionViewer::draw(bool is_active) const {
 			position + Graphics::Vector(1 + 10 * i, party->getHeight() + 5),
 			player_colors[i + 1], Graphics::Color::GREY);
 	}
-	if (estimation.player_winning != 4) {
-		drawString(L"Виден конец: " + std::to_wstring(estimation.player_winning) +
+	if (estimation.outcome != Game::OUTCOME_UNKNOWN) {
+		drawString(L"Виден конец: " + std::to_wstring(estimation.outcome) +
 			L"; ходов: " + std::to_wstring(estimation.turns_till_end),
 			position + Graphics::Vector(1, party->getHeight() + 6),
 			Graphics::Color::BLACK, Graphics::Color::GREY);

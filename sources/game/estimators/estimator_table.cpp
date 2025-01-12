@@ -35,7 +35,7 @@ Estimation EstimatorTable::estimatePosition(Position& position, uint8_t player_t
 Estimation EstimatorTable::estimatePositionTable(Position& position, uint8_t player_turn,
 		size_t depth) {
 	++nodes_visited;
-	if (depth == 0 || position.isGameEnded())
+	if (depth == 0 || position.getOutcome() != OUTCOME_UNKNOWN)
 		return Estimation(position);
 	const Estimation* estimation_table = table.get(position.getField());
 	if (estimation_table)
@@ -61,7 +61,7 @@ Estimation EstimatorTable::estimatePositionTable(Position& position, uint8_t pla
 		}
 		++column;
 	}
-	if (result.player_winning != 4)
+	if (result.outcome != OUTCOME_UNKNOWN)
 		++result.turns_till_end;
 	table.insert(position.takeField(), result);
 	return result;

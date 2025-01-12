@@ -8,11 +8,6 @@ Position::Position(size_t height, size_t width): height(height), width(width) {
 	calculateScores();
 }
 
-Position::Position(size_t height, size_t width, std::vector<uint64_t>&& field):
-		height(height), width(width), field(std::move(field)) {
-	calculateScores();
-}
-
 std::vector<uint64_t> Position::takeField() {
 	return std::move(field);
 }
@@ -44,67 +39,71 @@ uint8_t Position::getCell(size_t row, size_t column) const {
 void Position::setCell(size_t row, size_t column, uint8_t value) {
 	size_t index_outer = getIndexOuter(row, column);
 	size_t index_inner = getIndexInner(column);
-	field[index_outer] &= ~(static_cast<uint64_t>(3) << index_inner);
+	field[index_outer] &= ~(3ull << index_inner);
 	field[index_outer] |= static_cast<uint64_t>(value) << index_inner;
 }
 
 bool Position::isTurnPossible(size_t column) const {
-	return getCell(height - 1, column) == 0;
+	return getCell(height - 1, column) == NO_PLAYER;
 }
 
 void Position::makeTurn(size_t column, uint8_t player) {
 	size_t row = height - 1;
-	while (row > 0 && getCell(row - 1, column) == 0) {
+	while (row > 0 && getCell(row - 1, column) == NO_PLAYER) {
 		--row;
 	}
 	for (size_t index = 0; index < triples_all.size(); index += 3) {
-		uint8_t triple_player;
+		uint8_t player_of_triple;
 		size_t quantity;
 		getQuantityOfTriple(Graphics::Point(column, row), triples_all, index,
-			triple_player, quantity);
-		if (triple_player == 4)
+			player_of_triple, quantity);
+		if (player_of_triple == SEVERAL_PLAYERS || player_of_triple == INVALID_TRIPLE)
 			continue;
-		if (triple_player == 0) {
-			scores[player - 1] += triple_scores[1];
+		if (player_of_triple == NO_PLAYER) {
+			scores[player - 1] += combination_scores[1];
 			continue;
 		}
-		if (triple_player == player)
-			scores[player - 1] += triple_scores[quantity + 1];
-		scores[triple_player - 1] -= triple_scores[quantity];
-
+		if (player_of_triple == player)
+			scores[player - 1] += combination_scores[quantity + 1];
+		scores[player_of_triple - 1] -= combination_scores[quantity];
 	}
 	setCell(row, column, player);
 	--free_cells;
 }
 
+Position Position::makeTurnCopy(size_t column, uint8_t player) const {
+	Position result = *this;
+	result.makeTurn(column, player);
+	return result;
+}
+
 void Position::unmakeTurn(size_t column) {
 	size_t row = 0;
-	while (row + 1 < height && getCell(row + 1, column) != 0) {
+	while (row + 1 < height && getCell(row + 1, column) != NO_PLAYER) {
 		++row;
 	}
 	uint8_t player = getCell(row, column);
-	setCell(row, column, 0);
+	setCell(row, column, NO_PLAYER);
 	++free_cells;
 	for (size_t index = 0; index < triples_all.size(); index += 3) {
-		uint8_t triple_player;
+		uint8_t player_of_triple;
 		size_t quantity;
 		getQuantityOfTriple(Graphics::Point(column, row), triples_all, index,
-			triple_player, quantity);
-		if (triple_player == 4)
+			player_of_triple, quantity);
+		if (player_of_triple == SEVERAL_PLAYERS || player_of_triple == INVALID_TRIPLE)
 			continue;
-		if (triple_player == 0) {
-			scores[player - 1] -= triple_scores[1];
+		if (player_of_triple == NO_PLAYER) {
+			scores[player - 1] -= combination_scores[1];
 			continue;
 		}
-		if (triple_player == player)
-			scores[player - 1] -= triple_scores[quantity + 1];
-		scores[triple_player - 1] += triple_scores[quantity];
-
+		if (player_of_triple == player)
+			scores[player - 1] -= combination_scores[quantity + 1];
+		scores[player_of_triple - 1] += combination_scores[quantity];
 	}
 }
 
 
-const size_t Position::triple_scores[4] = { 0, 1, 3, 100'000'000 };
+const size_t Position::combination_scores[4] = { 0, 1, 3, 100'000'000 };
 
 const std::vector<Graphics::Vector> Position::triples_center = {
 	Graphics::LEFT, Graphics::Vector(), Graphics::RIGHT,
@@ -131,22 +130,23 @@ const std::vector<Graphics::Vector> Position::triples_all = {
 void Position::getQuantityOfTriple(const Graphics::Point& start,
 		const std::vector<Graphics::Vector>& triples, size_t index,
 		uint8_t& player, size_t& quantity) const {
-	player = 0;
+	player = NO_PLAYER;
 	quantity = 0;
+	const Graphics::Rectangle box(Graphics::Point(), width - 1, height - 1);
 	for (size_t i = index; i < index + 3; ++i) {
 		Graphics::Point current = start + triples[i];
-		if (current.x < 0 || current.y < 0 || current.x >= width || current.y >= height) {
-			player = 4;
+		if (!box.isPointInside(current)) {
+			player = INVALID_TRIPLE;
 			quantity = 0;
 			return;
 		}
 		uint8_t current_player = getCell(current.y, current.x);
-		if (current_player == 0)
+		if (current_player == NO_PLAYER)
 			continue;
-		if (player == 0) {
+		if (player == NO_PLAYER) {
 			player = current_player;
 		} else if (player != current_player) {
-			player = 4;
+			player = SEVERAL_PLAYERS;
 			quantity = 0;
 			return;
 		}
@@ -164,31 +164,28 @@ void Position::calculateScores() {
 				size_t quantity;
 				getQuantityOfTriple(Graphics::Point(column, row), triples_center, index,
 					player, quantity);
-				if (player != 0 && player != 4)
-					scores[player - 1] += triple_scores[quantity];
+				if (player == 1 || player == 2 || player == 3)
+					scores[player - 1] += combination_scores[quantity];
 			}
-			free_cells += getCell(row, column) == 0;
+			free_cells += getCell(row, column) == NO_PLAYER;
 		}
 	}
 }
+
 
 std::array<size_t, 3> Position::getScores() const {
 	return scores;
 }
 
-bool Position::isGameEnded() const {
-	return free_cells == 0 || scores[0] >= triple_scores[3] || scores[1] >= triple_scores[3] ||
-		scores[2] >= triple_scores[3];
-}
-
-uint8_t Position::getPlayerWon() const {
+uint8_t Position::getOutcome() const {
 	for (size_t i = 0; i < 3; ++i) {
-		if (scores[i] >= triple_scores[3])
+		if (scores[i] >= combination_scores[3])
 			return i + 1;
 	}
-	return 0;
+	if (free_cells == 0)
+		return OUTCOME_DRAW;
+	return OUTCOME_UNKNOWN;
 }
-
 
 bool Position::isCellWinning(size_t row, size_t column) const {
 	for (size_t index = 0; index < triples_all.size(); index += 3) {
@@ -201,6 +198,5 @@ bool Position::isCellWinning(size_t row, size_t column) const {
 	}
 	return false;
 }
-
 
 }

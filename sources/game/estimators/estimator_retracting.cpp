@@ -9,7 +9,7 @@ EstimatorRetracting::EstimatorRetracting(const Position& position, uint8_t playe
 Estimation EstimatorRetracting::estimatePosition(Position& position, uint8_t player_turn,
 		size_t depth) {
 	++nodes_visited;
-	if (depth == 0 || position.isGameEnded())
+	if (depth == 0 || position.getOutcome() != OUTCOME_UNKNOWN)
 		return Estimation(position);
 	size_t column = 0;
 	Estimation result;
@@ -31,7 +31,7 @@ Estimation EstimatorRetracting::estimatePosition(Position& position, uint8_t pla
 		}
 		++column;
 	}
-	if (result.player_winning != 4)
+	if (result.outcome != OUTCOME_UNKNOWN)
 		++result.turns_till_end;
 	return result;
 }
