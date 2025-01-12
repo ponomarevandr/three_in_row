@@ -20,9 +20,8 @@ Estimation EstimatorNaive::estimatePosition(Position& position, uint8_t player_t
 		}
 		if (column == position.getWidth())
 			break;
-		Position position_next = position;
-		position_next.makeTurn(column, player_turn);
-		Estimation estimation = estimatePosition(position_next, player_turn % 3 + 1, depth - 1);
+		Position position_next = position.makeTurnCopy(column, player_turn);
+		Estimation estimation = estimatePosition(position_next, nextPlayer(player_turn), depth - 1);
 		if (has_started) {
 			result = aggregateForPlayer(std::move(result), std::move(estimation), player_turn);
 		} else {

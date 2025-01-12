@@ -3,6 +3,11 @@
 
 namespace Game {
 
+uint8_t nextPlayer(uint8_t player) {
+	return player % 3 + 1;
+}
+
+
 Position::Position(size_t height, size_t width): height(height), width(width) {
 	field.assign(((width + 31) >> 5) * height, 0);
 	calculateScores();

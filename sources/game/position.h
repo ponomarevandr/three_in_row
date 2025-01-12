@@ -9,6 +9,9 @@
 
 namespace Game {
 
+uint8_t nextPlayer(uint8_t player);
+
+
 static constexpr uint8_t OUTCOME_DRAW = 0;
 static constexpr uint8_t OUTCOME_UNKNOWN = 4;
 

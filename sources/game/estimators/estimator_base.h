@@ -15,6 +15,8 @@ protected:
 
 protected:
 	static constexpr bool DEBUG = false;
+
+protected:
 	const Position& position_start;
 	uint8_t player_turn_start;
 	size_t depth_max;

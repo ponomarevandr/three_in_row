@@ -1,6 +1,5 @@
 #include "analysis_manager.h"
 
-#include "game/position.h"
 #include "game/estimators/estimator_pruning.h"
 #include "game/estimators/estimator_table.h"
 #include "debug/output.h"
