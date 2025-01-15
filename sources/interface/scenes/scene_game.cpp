@@ -15,7 +15,7 @@
 
 namespace Interface {
 
-SceneGame::SceneGame(Application* application): Scene(application), party(11, 11) {
+SceneGame::SceneGame(Application* application): Scene(application), party(7, 7) {
 	auto position_viewer = std::make_unique<PositionViewer>(this,
 		Graphics::Point(0, 0),
 		&party,
@@ -43,8 +43,7 @@ SceneGame::SceneGame(Application* application): Scene(application), party(11, 11
 
 	auto button_exit = std::make_unique<Button>(this,
 		Graphics::Point(0, Graphics::getScreenHeight() - 2),
-		Graphics::getScreenWidth() - 1,
-		0
+		Graphics::getScreenWidth() - 1
 	);
 	button_exit->setText(L"В меню");
 	button_exit->setCallback([this]() {

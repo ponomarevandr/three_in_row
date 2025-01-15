@@ -17,7 +17,7 @@ public:
 	explicit SceneYesNo(Application*);
 	void draw() const override;
 	void setQuestion(const std::wstring&);
-	void setCallback(bool answer, std::function<void()>&& callback);
+	void setCallback(bool answer, std::function<void()> callback);
 };
 
 }

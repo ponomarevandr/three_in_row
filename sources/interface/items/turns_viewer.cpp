@@ -12,7 +12,7 @@
 
 namespace Interface {
 
-TurnsViewer::TurnsViewer(Scene* scene, const Graphics::Point& position, int height,
+TurnsViewer::TurnsViewer(Scene* scene, const Graphics::Point& position, size_t height,
 	Game::Party* party, size_t* explored_turn): Item(scene, position), height(height),
 	party(party), explored_turn(explored_turn) {}
 
@@ -50,20 +50,27 @@ void TurnsViewer::draw() const {
 	const std::vector<size_t>& turns = party->getTurns();
 	size_t line = 0;
 	for (size_t i = first_turn_shown; i < turns.size() && line + 1 < height; ++i) {
-		Graphics::Color background_color = isActive() && *explored_turn == i ?
-			Graphics::Color::YELLOW_DARK : Graphics::Color::GREY;
+		Graphics::Color background_color = (
+			isActive() && *explored_turn == i
+		) ? Graphics::Color::YELLOW_DARK : Graphics::Color::GREY;
 		if (i == 0) {
-			Graphics::drawString(std::wstring(14, L'#'),
+			Graphics::drawString(
+				std::wstring(14, L'#'),
 				position + Graphics::Vector(4, 1),
-				Graphics::Color::BLACK, background_color);
+				Graphics::Color::BLACK,
+				background_color
+			);
 			++line;
 		} else {
 			std::wstring number_string = std::to_wstring(turns[i] + 1);
 			number_string.resize(4, L' ');
 			size_t turn_third = turnToUser(i).second - 1;
-			Graphics::drawString(number_string,
+			Graphics::drawString(
+				number_string,
 				position + Graphics::Vector(4 + turn_third * 5, 1 + line),
-				Graphics::player_colors[turn_third + 1], background_color);
+				Graphics::player_colors[turn_third + 1],
+				background_color
+			);
 			line += turn_third == 2;
 		}
 	}
@@ -75,9 +82,12 @@ void TurnsViewer::draw() const {
 	}
 	for (size_t i = 0; i + 1 < height; ++i) {
 		std::wstring number_string = std::to_wstring(turnToUser(first_turn_shown).first + i);
-		Graphics::drawString(number_string,
+		Graphics::drawString(
+			number_string,
 			position + Graphics::Vector(3 - static_cast<int>(number_string.size()), 1 + i),
-			Graphics::Color::BLACK, Graphics::Color::GREY);
+			Graphics::Color::BLACK,
+			Graphics::Color::GREY
+		);
 	}
 }
 
@@ -100,8 +110,8 @@ void TurnsViewer::process() {
 	}
 }
 
-void TurnsViewer::setCallbackRevert(std::function<void()>&& callback_revert) {
-	this->callback_revert = callback_revert;
+void TurnsViewer::setCallbackRevert(std::function<void()> callback_revert) {
+	this->callback_revert = std::move(callback_revert);
 }
 
 }

@@ -14,8 +14,7 @@ namespace Interface {
 SceneYesNo::SceneYesNo(Application* application): Scene(application) {
 	auto button_yes = std::make_unique<Button>(this,
 		Graphics::Point(0, 10),
-		Graphics::getScreenWidth() - 1,
-		0
+		Graphics::getScreenWidth() - 1
 	);
 	button_yes->setText(L"Да");
 	button_yes->setCallback([this]() {
@@ -27,8 +26,7 @@ SceneYesNo::SceneYesNo(Application* application): Scene(application) {
 
 	auto button_no = std::make_unique<Button>(this,
 		Graphics::Point(0, 12),
-		Graphics::getScreenWidth() - 1,
-		0
+		Graphics::getScreenWidth() - 1
 	);
 	button_no->setText(L"Нет");
 	button_no->setCallback([this]() {
@@ -55,8 +53,8 @@ void SceneYesNo::setQuestion(const std::wstring& question) {
 	this->question = question;
 }
 
-void SceneYesNo::setCallback(bool answer, std::function<void()>&& callback) {
-	callbacks[answer] = callback;
+void SceneYesNo::setCallback(bool answer, std::function<void()> callback) {
+	callbacks[answer] = std::move(callback);
 }
 
 }

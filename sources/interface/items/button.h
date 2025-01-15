@@ -11,17 +11,16 @@ namespace Interface {
 
 class Button: public Item {
 protected:
-	int width;
-	int height;
+	size_t width;
 	std::wstring text;
 	std::function<void()> callback;
 
 public:
-	Button(Scene* scene, const Graphics::Point& position, int width, int height);
+	Button(Scene* scene, const Graphics::Point& position, size_t width);
 	void draw() const override;
 	void process() override;
 	void setText(const std::wstring&);
-	void setCallback(std::function<void()>&&);
+	void setCallback(std::function<void()>);
 };
 
 }

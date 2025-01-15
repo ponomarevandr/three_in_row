@@ -2,7 +2,6 @@
 
 #include "interface/items/item_base.h"
 #include "graphics/geometry.h"
-#include "graphics/screen.h"
 #include "game/party.h"
 
 #include <functional>
@@ -12,7 +11,7 @@ namespace Interface {
 
 class TurnsViewer: public Item {
 private:
-	int height;
+	size_t height;
 	Game::Party* party;
 	size_t* explored_turn;
 	mutable size_t first_turn_shown = 0;
@@ -22,11 +21,11 @@ private:
 	void updateFirstTurnShown() const;
 
 public:
-	TurnsViewer(Scene* scene, const Graphics::Point& position, int height, Game::Party* party,
+	TurnsViewer(Scene* scene, const Graphics::Point& position, size_t height, Game::Party* party,
 		size_t* explored_turn);
 	void draw() const override;
 	void process() override;
-	void setCallbackRevert(std::function<void()>&&);
+	void setCallbackRevert(std::function<void()>);
 };
 
 }

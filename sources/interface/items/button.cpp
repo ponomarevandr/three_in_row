@@ -8,13 +8,17 @@
 
 namespace Interface {
 
-Button::Button(Scene* scene, const Graphics::Point& position, int width, int height):
-	Item(scene, position), width(width), height(height) {}
+Button::Button(Scene* scene, const Graphics::Point& position, size_t width):
+	Item(scene, position), width(width) {}
 
 void Button::draw() const {
 	std::wstring edited_text = isActive() ? L"< " + text + L" >" : text;
-	drawStringAtCenter(edited_text, Graphics::Rectangle(position, width, height),
-		Graphics::Color::BLACK, Graphics::Color::GREY);
+	drawStringAtCenter(
+		edited_text,
+		Graphics::Rectangle(position, width, 0),
+		Graphics::Color::BLACK,
+		Graphics::Color::GREY
+	);
 }
 
 void Button::process() {
@@ -28,8 +32,8 @@ void Button::setText(const std::wstring& text) {
 	this->text = text;
 }
 
-void Button::setCallback(std::function<void()>&& callback) {
-	this->callback = callback;
+void Button::setCallback(std::function<void()> callback) {
+	this->callback = std::move(callback);
 }
 
 }
