@@ -5,8 +5,6 @@
 
 namespace Interface {
 
-int getKey() {
-	return getch();
-}
+const int NO_KEY = ERR;
 
 }

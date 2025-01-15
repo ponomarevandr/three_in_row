@@ -27,7 +27,9 @@ set(SOURCES
 	sources/game/estimators/estimator_retracting.cpp
 	sources/game/estimators/estimator_pruning.cpp
 	sources/game/estimators/estimator_table.cpp
-	sources/game/analysis_manager.cpp
+	sources/game/analysis/manager.cpp
+	sources/game/analysis/manager_async.cpp
+	sources/thread/worker.cpp
 )
 
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -Wall)

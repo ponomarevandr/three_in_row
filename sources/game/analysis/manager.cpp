@@ -1,4 +1,4 @@
-#include "analysis_manager.h"
+#include "manager.h"
 
 #include "game/estimators/estimator_pruning.h"
 #include "game/estimators/estimator_table.h"

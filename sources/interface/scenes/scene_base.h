@@ -19,7 +19,10 @@ protected:
 public:
 	explicit Scene(Application*);
 	virtual void draw() const;
-	virtual void processKey(int key);
+	virtual void process();
+	int getKey() const;
+	void redrawNeeded();
+	bool isItemActive(const Item*) const;
 };
 
 }

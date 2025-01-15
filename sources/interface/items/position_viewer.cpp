@@ -1,5 +1,6 @@
 #include "position_viewer.h"
 
+#include "interface/scenes/scene_base.h"
 #include "interface/input.h"
 #include "graphics/primitives.h"
 #include "game/position.h"
@@ -30,10 +31,10 @@ const Graphics::Color PositionViewer::cell_colors_selected[2] = {
 	Graphics::Color::YELLOW_DARK,
 };
 
-PositionViewer::PositionViewer(const Graphics::Point& position, Game::Party* party,
-	size_t* explored_turn): Item(position), party(party), explored_turn(explored_turn) {}
+PositionViewer::PositionViewer(Scene* scene, const Graphics::Point& position, Game::Party* party,
+	size_t* explored_turn): Item(scene, position), party(party), explored_turn(explored_turn) {}
 
-void PositionViewer::draw(bool is_active) const {
+void PositionViewer::draw() const {
 	Graphics::drawBox(Graphics::Rectangle(position, party->getWidth() + 1, party->getHeight() + 2),
 		Graphics::Color::BLACK, Graphics::Color::GREY);
 	for (size_t i = 0; i < party->getWidth(); i += 3) {
@@ -43,14 +44,14 @@ void PositionViewer::draw(bool is_active) const {
 			Graphics::Color::BLACK, cell_colors[i & 1]);
 	}
 
-	Game::Position game_position = is_active ? party->getPosition() :
+	Game::Position game_position = isActive() ? party->getPosition() :
 		party->getPositionOfTurn(*explored_turn);
 	for (size_t i = 0; i < party->getHeight(); ++i) {
 		for (size_t j = 0; j < party->getWidth(); ++j) {
 			Graphics::Point current = position +
 				Graphics::Vector(1 + j, party->getHeight() - i);
 			bool is_odd = ((i + j) & 1) != 0;
-			Graphics::Color background_color = is_active &&
+			Graphics::Color background_color = isActive() &&
 				(party->isGameEnded() ? game_position.isCellWinning(i, j) : j == selected_column) ?
 				cell_colors_selected[is_odd] : cell_colors[is_odd];
 			uint8_t player = game_position.getCell(i, j);
@@ -65,7 +66,7 @@ void PositionViewer::draw(bool is_active) const {
 			position + Graphics::Vector(1 + 10 * i, party->getHeight() + 3),
 			player_colors[i + 1], Graphics::Color::GREY);
 	}
-	Game::Estimation estimation = is_active ? party->getEstimation() :
+	Game::Estimation estimation = isActive() ? party->getEstimation() :
 		party->getEstimationOfTurn(*explored_turn);
 	for (size_t i = 0; i < 3; ++i) {
 		drawString(std::to_wstring(estimation.values[i]),
@@ -86,7 +87,7 @@ void PositionViewer::draw(bool is_active) const {
 		if (scores[0] == 1 && scores[1] == 1 && scores[2] == 1) {
 			message = L"Ничья";
 			message_player = 0;
-			if (is_active)
+			if (isActive())
 				message_background_color = Graphics::Color::YELLOW_DARK;
 		} else {
 			message = L"Победа ";
@@ -103,10 +104,12 @@ void PositionViewer::draw(bool is_active) const {
 	}
 }
 
-void PositionViewer::processKey(int key) {
+void PositionViewer::process() {
+	if (!isActive())
+		return;
 	if (party->isGameEnded())
 		return;
-	switch (key) {
+	switch (scene->getKey()) {
 	case KEY_LEFT:
 		selected_column = (selected_column + party->getWidth() - 1) % party->getWidth();
 		break;

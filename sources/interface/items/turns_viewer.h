@@ -26,10 +26,10 @@ private:
 	void updateFirstTurnShown() const;
 
 public:
-	TurnsViewer(const Graphics::Point& position, int height, Game::Party* party,
+	TurnsViewer(Scene* scene, const Graphics::Point& position, int height, Game::Party* party,
 		size_t* explored_turn);
-	void draw(bool is_active) const override;
-	void processKey(int key) override;
+	void draw() const override;
+	void process() override;
 	void setCallbackRevert(std::function<void()>&&);
 };
 

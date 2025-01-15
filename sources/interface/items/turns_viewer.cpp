@@ -1,5 +1,6 @@
 #include "turns_viewer.h"
 
+#include "interface/scenes/scene_base.h"
 #include "interface/input.h"
 #include "interface/translation.h"
 #include "graphics/primitives.h"
@@ -18,9 +19,9 @@ const Graphics::Color TurnsViewer::player_colors[3] = {
 
 const wchar_t TurnsViewer::player_symbols[3] = {L'x', L'o', L'▽'};
 
-TurnsViewer::TurnsViewer(const Graphics::Point& position, int height, Game::Party* party,
-	size_t* explored_turn): Item(position), height(height), party(party),
-	explored_turn(explored_turn) {}
+TurnsViewer::TurnsViewer(Scene* scene, const Graphics::Point& position, int height,
+	Game::Party* party, size_t* explored_turn): Item(scene, position), height(height),
+	party(party), explored_turn(explored_turn) {}
 
 void TurnsViewer::updateFirstTurnShown() const {
 	while (first_turn_shown > *explored_turn) {
@@ -43,7 +44,7 @@ void TurnsViewer::updateFirstTurnShown() const {
 	}
 }
 
-void TurnsViewer::draw(bool is_active) const {
+void TurnsViewer::draw() const {
 	updateFirstTurnShown();
 	for (size_t i = 0; i < 3; ++i) {
 		drawSymbol(player_symbols[i], position + Graphics::Vector(4 + 5 * i, 0),
@@ -52,7 +53,7 @@ void TurnsViewer::draw(bool is_active) const {
 	const std::vector<size_t>& turns = party->getTurns();
 	size_t line = 0;
 	for (size_t i = first_turn_shown; i < turns.size() && line + 1 < height; ++i) {
-		Graphics::Color background_color = is_active && *explored_turn == i ?
+		Graphics::Color background_color = isActive() && *explored_turn == i ?
 			Graphics::Color::YELLOW_DARK : Graphics::Color::GREY;
 		if (i == 0) {
 			Graphics::drawString(std::wstring(14, L'#'),
@@ -83,8 +84,10 @@ void TurnsViewer::draw(bool is_active) const {
 	}
 }
 
-void TurnsViewer::processKey(int key) {
-	switch (key) {
+void TurnsViewer::process() {
+	if (!isActive())
+		return;
+	switch (scene->getKey()) {
 	case KEY_LEFT:
 		if (*explored_turn > 0)
 			--(*explored_turn);

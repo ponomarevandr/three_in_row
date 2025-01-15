@@ -1,6 +1,6 @@
 #include "party.h"
 
-#include "game/analysis_manager.h"
+#include "game/analysis/manager.h"
 
 
 namespace Game {

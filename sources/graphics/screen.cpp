@@ -2,6 +2,7 @@
 
 #include <ncurses.h>
 
+#include <cmath>
 #include <clocale>
 
 
@@ -34,12 +35,13 @@ void initializeColorPairs() {
 int screen_width;
 int screen_height;
 
-void screenInitialize() {
+void screenInitialize(float getch_rate) {
 	setlocale(LC_ALL, "");
 	initscr();
 	cbreak();
 	keypad(stdscr, true);
 	noecho();
+	timeout(std::lround(1000.0f / getch_rate));
 	start_color();
 	initializeColorPairs();
 	curs_set(0);

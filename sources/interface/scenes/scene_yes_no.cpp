@@ -12,7 +12,7 @@
 namespace Interface {
 
 SceneYesNo::SceneYesNo(Application* application): Scene(application) {
-	auto button_yes = std::make_unique<Button>(Graphics::Point(0, 10),
+	auto button_yes = std::make_unique<Button>(this, Graphics::Point(0, 10),
 		Graphics::getScreenWidth() - 1, 0);
 	button_yes->setText(L"Да");
 	button_yes->setCallback([this]() {
@@ -22,7 +22,7 @@ SceneYesNo::SceneYesNo(Application* application): Scene(application) {
 	});
 	items.push_back(std::move(button_yes));
 
-	auto button_no = std::make_unique<Button>(Graphics::Point(0, 12),
+	auto button_no = std::make_unique<Button>(this, Graphics::Point(0, 12),
 		Graphics::getScreenWidth() - 1, 0);
 	button_no->setText(L"Нет");
 	button_no->setCallback([this]() {

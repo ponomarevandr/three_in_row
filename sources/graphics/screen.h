@@ -3,7 +3,7 @@
 
 namespace Graphics {
 
-void screenInitialize();
+void screenInitialize(float getch_rate);
 void screenRefresh();
 void screenFinalize();
 

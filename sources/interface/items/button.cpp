@@ -1,5 +1,6 @@
 #include "button.h"
 
+#include "interface/scenes/scene_base.h"
 #include "interface/input.h"
 #include "graphics/primitives.h"
 #include "graphics/screen.h"
@@ -7,17 +8,19 @@
 
 namespace Interface {
 
-Button::Button(const Graphics::Point& position, int width, int height): Item(position),
-	width(width), height(height) {}
+Button::Button(Scene* scene, const Graphics::Point& position, int width, int height):
+	Item(scene, position), width(width), height(height) {}
 
-void Button::draw(bool is_active) const {
-	std::wstring edited_text = is_active ? L"< " + text + L" >" : text;
+void Button::draw() const {
+	std::wstring edited_text = isActive() ? L"< " + text + L" >" : text;
 	drawStringAtCenter(edited_text, Graphics::Rectangle(position, width, height),
 		Graphics::Color::BLACK, Graphics::Color::GREY);
 }
 
-void Button::processKey(int key) {
-	if (key == KEY_ENTER && callback)
+void Button::process() {
+	if (!isActive())
+		return;
+	if (scene->getKey() == KEY_ENTER && callback)
 		callback();
 }
 
