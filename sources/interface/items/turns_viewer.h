@@ -12,10 +12,6 @@ namespace Interface {
 
 class TurnsViewer: public Item {
 private:
-	static const Graphics::Color player_colors[3];
-	static const wchar_t player_symbols[3];
-
-private:
 	int height;
 	Game::Party* party;
 	size_t* explored_turn;

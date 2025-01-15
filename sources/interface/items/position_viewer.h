@@ -10,8 +10,6 @@ namespace Interface {
 
 class PositionViewer: public Item {
 private:
-	static const Graphics::Color player_colors[4];
-	static const wchar_t player_symbols[4];
 	static const Graphics::Color cell_colors[2];
 	static const Graphics::Color cell_colors_selected[2];
 

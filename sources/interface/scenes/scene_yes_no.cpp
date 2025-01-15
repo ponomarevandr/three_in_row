@@ -12,8 +12,11 @@
 namespace Interface {
 
 SceneYesNo::SceneYesNo(Application* application): Scene(application) {
-	auto button_yes = std::make_unique<Button>(this, Graphics::Point(0, 10),
-		Graphics::getScreenWidth() - 1, 0);
+	auto button_yes = std::make_unique<Button>(this,
+		Graphics::Point(0, 10),
+		Graphics::getScreenWidth() - 1,
+		0
+	);
 	button_yes->setText(L"Да");
 	button_yes->setCallback([this]() {
 		this->application->popScene();
@@ -22,8 +25,11 @@ SceneYesNo::SceneYesNo(Application* application): Scene(application) {
 	});
 	items.push_back(std::move(button_yes));
 
-	auto button_no = std::make_unique<Button>(this, Graphics::Point(0, 12),
-		Graphics::getScreenWidth() - 1, 0);
+	auto button_no = std::make_unique<Button>(this,
+		Graphics::Point(0, 12),
+		Graphics::getScreenWidth() - 1,
+		0
+	);
 	button_no->setText(L"Нет");
 	button_no->setCallback([this]() {
 		this->application->popScene();
@@ -31,13 +37,18 @@ SceneYesNo::SceneYesNo(Application* application): Scene(application) {
 			this->callbacks[false]();
 	});
 	items.push_back(std::move(button_no));
+
 	active_index = 1;
 }
 
 void SceneYesNo::draw() const {
 	Scene::draw();
-	Graphics::drawString(question, Graphics::Point(2, 7),
-		Graphics::Color::BLACK, Graphics::Color::GREY);
+	Graphics::drawString(
+		question,
+		Graphics::Point(2, 7),
+		Graphics::Color::BLACK,
+		Graphics::Color::GREY
+	);
 }
 
 void SceneYesNo::setQuestion(const std::wstring& question) {

@@ -7,6 +7,7 @@ set(SOURCES
 	sources/graphics/geometry.cpp
 	sources/graphics/screen.cpp
 	sources/graphics/primitives.cpp
+	sources/graphics/players.cpp
 	sources/debug/output.cpp
 	sources/interface/application.cpp
 	sources/interface/input.cpp
@@ -18,7 +19,7 @@ set(SOURCES
 	sources/interface/items/button.cpp
 	sources/interface/items/position_viewer.cpp
 	sources/interface/items/turns_viewer.cpp
-	sources/interface/translation.cpp
+	sources/interface/turn_translation.cpp
 	sources/game/position.cpp
 	sources/game/party.cpp
 	sources/game/estimators/estimation.cpp

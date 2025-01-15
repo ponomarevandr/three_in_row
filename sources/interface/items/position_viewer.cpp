@@ -3,6 +3,7 @@
 #include "interface/scenes/scene_base.h"
 #include "interface/input.h"
 #include "graphics/primitives.h"
+#include "graphics/players.h"
 #include "game/position.h"
 #include "game/estimators/estimation.h"
 
@@ -11,15 +12,6 @@
 
 
 namespace Interface {
-
-const Graphics::Color PositionViewer::player_colors[4] = {
-	Graphics::Color::WHITE,
-	Graphics::Color::BLACK,
-	Graphics::Color::BLUE,
-	Graphics::Color::GREEN
-};
-
-const wchar_t PositionViewer::player_symbols[4] = {L' ', L'x', L'o', L'▽'};
 
 const Graphics::Color PositionViewer::cell_colors[2] = {
 	Graphics::Color::WHITE,
@@ -55,8 +47,12 @@ void PositionViewer::draw() const {
 				(party->isGameEnded() ? game_position.isCellWinning(i, j) : j == selected_column) ?
 				cell_colors_selected[is_odd] : cell_colors[is_odd];
 			uint8_t player = game_position.getCell(i, j);
-			Graphics::drawSymbol(player_symbols[player], current, player_colors[player],
-				background_color);
+			Graphics::drawSymbol(
+				Graphics::player_symbols[player],
+				current,
+				Graphics::player_colors[player],
+				background_color
+			);
 		}
 	}
 
@@ -64,14 +60,14 @@ void PositionViewer::draw() const {
 	for (size_t i = 0; i < 3; ++i) {
 		drawString(std::to_wstring(scores[i]),
 			position + Graphics::Vector(1 + 10 * i, party->getHeight() + 3),
-			player_colors[i + 1], Graphics::Color::GREY);
+			Graphics::player_colors[i + 1], Graphics::Color::GREY);
 	}
 	Game::Estimation estimation = isActive() ? party->getEstimation() :
 		party->getEstimationOfTurn(*explored_turn);
 	for (size_t i = 0; i < 3; ++i) {
 		drawString(std::to_wstring(estimation.values[i]),
 			position + Graphics::Vector(1 + 10 * i, party->getHeight() + 5),
-			player_colors[i + 1], Graphics::Color::GREY);
+			Graphics::player_colors[i + 1], Graphics::Color::GREY);
 	}
 	if (estimation.outcome != Game::OUTCOME_UNKNOWN) {
 		drawString(L"Виден конец: " + std::to_wstring(estimation.outcome) +
@@ -98,9 +94,9 @@ void PositionViewer::draw() const {
 	drawString(message, position + Graphics::Vector(1, party->getHeight() + 8),
 		Graphics::Color::BLACK, message_background_color);
 	if (message_player != 0) {
-		drawSymbol(player_symbols[message_player],
+		drawSymbol(Graphics::player_symbols[message_player],
 			position + Graphics::Vector(1 + message.size(), party->getHeight() + 8),
-			player_colors[message_player], Graphics::Color::GREY);
+			Graphics::player_colors[message_player], Graphics::Color::GREY);
 	}
 }
 

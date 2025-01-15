@@ -2,22 +2,15 @@
 
 #include "interface/scenes/scene_base.h"
 #include "interface/input.h"
-#include "interface/translation.h"
+#include "interface/turn_translation.h"
 #include "graphics/primitives.h"
+#include "graphics/players.h"
 
 #include <string>
 #include <algorithm>
 
 
 namespace Interface {
-
-const Graphics::Color TurnsViewer::player_colors[3] = {
-	Graphics::Color::BLACK,
-	Graphics::Color::BLUE,
-	Graphics::Color::GREEN
-};
-
-const wchar_t TurnsViewer::player_symbols[3] = {L'x', L'o', L'▽'};
 
 TurnsViewer::TurnsViewer(Scene* scene, const Graphics::Point& position, int height,
 	Game::Party* party, size_t* explored_turn): Item(scene, position), height(height),
@@ -32,7 +25,7 @@ void TurnsViewer::updateFirstTurnShown() const {
 		}
 	}
 	while (true) {
-		std::pair<size_t, size_t> turn = turnToUser(first_turn_shown);
+		std::pair<size_t, uint8_t> turn = turnToUser(first_turn_shown);
 		turn.first += height - 1;
 		if (turnToProgram(turn.first, turn.second) > *explored_turn)
 			break;
@@ -47,8 +40,12 @@ void TurnsViewer::updateFirstTurnShown() const {
 void TurnsViewer::draw() const {
 	updateFirstTurnShown();
 	for (size_t i = 0; i < 3; ++i) {
-		drawSymbol(player_symbols[i], position + Graphics::Vector(4 + 5 * i, 0),
-			player_colors[i], Graphics::Color::GREY);
+		drawSymbol(
+			Graphics::player_symbols[i + 1],
+			position + Graphics::Vector(4 + 5 * i, 0),
+			Graphics::player_colors[i + 1],
+			Graphics::Color::GREY
+		);
 	}
 	const std::vector<size_t>& turns = party->getTurns();
 	size_t line = 0;
@@ -63,10 +60,10 @@ void TurnsViewer::draw() const {
 		} else {
 			std::wstring number_string = std::to_wstring(turns[i] + 1);
 			number_string.resize(4, L' ');
-			size_t turn_third = turnToUser(i).second;
+			size_t turn_third = turnToUser(i).second - 1;
 			Graphics::drawString(number_string,
 				position + Graphics::Vector(4 + turn_third * 5, 1 + line),
-				player_colors[turn_third], background_color);
+				Graphics::player_colors[turn_third + 1], background_color);
 			line += turn_third == 2;
 		}
 	}
