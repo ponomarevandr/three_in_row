@@ -2,7 +2,6 @@
 
 #include "interface/scenes/scene_base.h"
 #include "interface/input.h"
-#include "interface/turn_translation.h"
 #include "graphics/primitives.h"
 #include "graphics/players.h"
 
@@ -16,29 +15,7 @@ TurnsViewer::TurnsViewer(Scene* scene, const Graphics::Point& position, size_t h
 	Game::Party* party, size_t* explored_turn): Item(scene, position), height(height),
 	party(party), explored_turn(explored_turn) {}
 
-void TurnsViewer::updateFirstTurnShown() const {
-	while (first_turn_shown > *explored_turn) {
-		if (first_turn_shown == 1) {
-			first_turn_shown = 0;
-		} else {
-			first_turn_shown -= 3;
-		}
-	}
-	while (true) {
-		std::pair<size_t, uint8_t> turn = turnToUser(first_turn_shown);
-		turn.first += height - 1;
-		if (turnToProgram(turn.first, turn.second) > *explored_turn)
-			break;
-		if (first_turn_shown == 0) {
-			first_turn_shown = 1;
-		} else {
-			first_turn_shown += 3;
-		}
-	}
-}
-
 void TurnsViewer::draw() const {
-	updateFirstTurnShown();
 	for (size_t i = 0; i < 3; ++i) {
 		drawSymbol(
 			Graphics::player_symbols[i + 1],
@@ -48,31 +25,19 @@ void TurnsViewer::draw() const {
 		);
 	}
 	const std::vector<size_t>& turns = party->getTurns();
-	size_t line = 0;
-	for (size_t i = first_turn_shown; i < turns.size() && line + 1 < height; ++i) {
+	for (size_t i = 0; first_turn_shown + i < turns.size() + 1 && i < (height - 1) * 3; ++i) {
 		Graphics::Color background_color = (
-			isActive() && *explored_turn == i
+			isActive() && *explored_turn == first_turn_shown + i
 		) ? Graphics::Color::YELLOW_DARK : Graphics::Color::GREY;
-		if (i == 0) {
-			Graphics::drawString(
-				std::wstring(14, L'#'),
-				position + Graphics::Vector(4, 1),
-				Graphics::Color::BLACK,
-				background_color
-			);
-			++line;
-		} else {
-			std::wstring number_string = std::to_wstring(turns[i] + 1);
-			number_string.resize(4, L' ');
-			size_t turn_third = turnToUser(i).second - 1;
-			Graphics::drawString(
-				number_string,
-				position + Graphics::Vector(4 + turn_third * 5, 1 + line),
-				Graphics::player_colors[turn_third + 1],
-				background_color
-			);
-			line += turn_third == 2;
-		}
+		std::wstring number_string =
+			first_turn_shown + i < turns.size() ? std::to_wstring(turns[i] + 1) : L"";
+		number_string.resize(4, L' ');
+		Graphics::drawString(
+			number_string,
+			position + Graphics::Vector(4 + i % 3 * 5, 1 + i / 3),
+			Graphics::player_colors[i % 3 + 1],
+			background_color
+		);
 	}
 	for (size_t i = 0; i < 3; ++i) {
 		drawLine({
@@ -81,7 +46,7 @@ void TurnsViewer::draw() const {
 		}, Graphics::Color::BLACK, Graphics::Color::GREY);
 	}
 	for (size_t i = 0; i + 1 < height; ++i) {
-		std::wstring number_string = std::to_wstring(turnToUser(first_turn_shown).first + i);
+		std::wstring number_string = std::to_wstring(first_turn_shown / 3 + 1 + i);
 		Graphics::drawString(
 			number_string,
 			position + Graphics::Vector(3 - static_cast<int>(number_string.size()), 1 + i),
@@ -91,23 +56,30 @@ void TurnsViewer::draw() const {
 	}
 }
 
+void TurnsViewer::updateFirstTurnShown() {
+	first_turn_shown = std::min(first_turn_shown, *explored_turn / 3 * 3);
+	first_turn_shown =
+		(std::max(first_turn_shown / 3 + height - 2, *explored_turn / 3) - height + 2) * 3;
+}
+
 void TurnsViewer::process() {
-	if (!isActive())
-		return;
-	switch (scene->getKey()) {
-	case KEY_LEFT:
-		if (*explored_turn > 0)
-			--(*explored_turn);
-		break;
-	case KEY_RIGHT:
-		if (*explored_turn + 1 < party->getTurns().size())
-			++(*explored_turn);
-		break;
-	case KEY_ENTER:
-		if (*explored_turn + 1 != party->getTurns().size() && callback_revert)
-			callback_revert();
-		break;
+	if (isActive()) {
+		switch (scene->getKey()) {
+		case KEY_LEFT:
+			if (*explored_turn > 0)
+				--(*explored_turn);
+			break;
+		case KEY_RIGHT:
+			if (*explored_turn < party->getTurns().size())
+				++(*explored_turn);
+			break;
+		case KEY_ENTER:
+			if (*explored_turn != party->getTurns().size() && callback_revert)
+				callback_revert();
+			break;
+		}
 	}
+	updateFirstTurnShown();
 }
 
 void TurnsViewer::setCallbackRevert(std::function<void()> callback_revert) {

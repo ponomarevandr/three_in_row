@@ -25,7 +25,7 @@ SceneGame::SceneGame(Application* application): Scene(application), party(7, 7, 
 
 	auto turns_viewer = std::make_unique<TurnsViewer>(this,
 		Graphics::Point(Graphics::getScreenWidth() - 19, 1),
-		Graphics::getScreenHeight() - 4,
+		10,//Graphics::getScreenHeight() - 4,
 		&party,
 		&explored_turn
 	);

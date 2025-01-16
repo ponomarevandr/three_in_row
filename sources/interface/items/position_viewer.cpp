@@ -158,7 +158,7 @@ void PositionViewer::process() {
 	case KEY_SPACE:
 		if (party->isTurnPossible(selected_column)) {
 			party->makeTurn(selected_column);
-			*explored_turn = party->getTurns().size() - 1;
+			*explored_turn = party->getTurns().size();
 		}
 		break;
 	}

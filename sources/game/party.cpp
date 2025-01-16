@@ -10,7 +10,6 @@ namespace Game {
 Party::Party(size_t height, size_t width, size_t estimation_time_ms_target):
 		estimation_time_ms_target(estimation_time_ms_target) {
 	positions.emplace_back(height, width);
-	turns.push_back(1 << 20);
 	if (estimation_time_ms_target > 0) {
 		analysis_thread = std::make_unique<std::thread>([this]() {
 			this->analysis_manager.run();
@@ -74,7 +73,7 @@ const std::vector<Estimation>& Party::getEstimations() const {
 
 void Party::revertToTurn(size_t index) {
 	positions.resize(index + 1);
-	turns.resize(index + 1);
+	turns.resize(index);
 	if (index + 1 < estimations.size())
 		estimations.resize(index + 1);
 	is_analysis_discarded = true;

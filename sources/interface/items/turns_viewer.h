@@ -14,11 +14,11 @@ private:
 	size_t height;
 	Game::Party* party;
 	size_t* explored_turn;
-	mutable size_t first_turn_shown = 0;
+	size_t first_turn_shown = 0;
 	std::function<void()> callback_revert;
 
 private:
-	void updateFirstTurnShown() const;
+	void updateFirstTurnShown();
 
 public:
 	TurnsViewer(Scene* scene, const Graphics::Point& position, size_t height, Game::Party* party,
