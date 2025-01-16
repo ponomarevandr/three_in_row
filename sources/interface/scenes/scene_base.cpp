@@ -19,13 +19,17 @@ void Scene::draw() const {
 void Scene::process() {
 	if (items.empty())
 		return;
-	switch (getKey()) {
-	case KEY_UP:
-		active_index = (active_index + items.size() - 1) % items.size();
-		break;
-	case KEY_DOWN:
-		active_index = (active_index + 1) % items.size();
-		break;
+	for (size_t i = 0; i < items.size(); ++i) {
+		if (i > 0 && items[active_index]->canBeActive())
+			break;
+		switch (getKey()) {
+		case KEY_UP:
+			active_index = (active_index + items.size() - 1) % items.size();
+			break;
+		case KEY_DOWN:
+			active_index = (active_index + 1) % items.size();
+			break;
+		}
 	}
 	for (size_t i = 0; i < items.size(); ++i) {
 		items[i]->process();

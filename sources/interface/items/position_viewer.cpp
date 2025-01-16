@@ -28,7 +28,11 @@ PositionViewer::PositionViewer(Scene* scene, const Graphics::Point& position, Ga
 
 void PositionViewer::draw() const {
 	Graphics::drawBox(
-		Graphics::Rectangle(position, party->getWidth() + 1, party->getHeight() + 2),
+		Graphics::Rectangle(
+			position + Graphics::Vector(1, 0),
+			party->getWidth() + 1,
+			party->getHeight() + 1
+		),
 		Graphics::Color::BLACK,
 		Graphics::Color::GREY
 	);
@@ -36,7 +40,19 @@ void PositionViewer::draw() const {
 		std::wstring number_string = std::to_wstring(i + 1);
 		Graphics::drawString(
 			number_string,
-			position + Graphics::Vector(2 + i - number_string.size(), party->getHeight() + 1),
+			position + Graphics::Vector(3 + i - number_string.size(), party->getHeight() + 1),
+			Graphics::Color::BLACK,
+			cell_colors[i & 1]
+		);
+	}
+	for (size_t i = 0; i < party->getHeight(); i += 3) {
+		std::wstring number_string = std::to_wstring(i + 1);
+		Graphics::drawString(
+			number_string,
+			position + Graphics::Vector(
+				2 - static_cast<int>(number_string.size()),
+				party->getHeight() - i
+			),
 			Graphics::Color::BLACK,
 			cell_colors[i & 1]
 		);
@@ -47,7 +63,7 @@ void PositionViewer::draw() const {
 	for (size_t i = 0; i < party->getHeight(); ++i) {
 		for (size_t j = 0; j < party->getWidth(); ++j) {
 			Graphics::Point current =
-				position + Graphics::Vector(1 + j, party->getHeight() - i);
+				position + Graphics::Vector(2 + j, party->getHeight() - i);
 			bool is_odd = (i + j) & 1;
 			Graphics::Color background_color = cell_colors[is_odd];
 			if (isActive()) {
@@ -86,14 +102,14 @@ void PositionViewer::draw() const {
 	}
 	drawString(
 		message,
-		position + Graphics::Vector(1, party->getHeight() + 8),
+		position + Graphics::Vector(2, party->getHeight() + 3),
 		Graphics::Color::BLACK,
 		message_background_color
 	);
 	if (message_player != 0) {
 		drawSymbol(
 			Graphics::player_symbols[message_player],
-			position + Graphics::Vector(1 + message.size(), party->getHeight() + 8),
+			position + Graphics::Vector(2 + message.size(), party->getHeight() + 3),
 			Graphics::player_colors[message_player],
 			Graphics::Color::GREY
 		);

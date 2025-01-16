@@ -21,6 +21,9 @@ void drawStringAtCenter(const std::wstring& string, const Rectangle& rectangle,
 void drawSymbol(wchar_t symbol, const Point& point, Color foreground_color,
 	Color background_color);
 
+void drawStringDirected(const std::wstring& string, const Point& start, const Vector& direction,
+	Color foreground_color, Color background_color);
+
 
 void drawSegment(const Segment& segment, Color foreground_color, Color background_color);
 

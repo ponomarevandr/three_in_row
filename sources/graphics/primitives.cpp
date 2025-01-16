@@ -31,6 +31,14 @@ void drawSymbol(wchar_t symbol, const Point& point, Color foreground_color,
 	drawString(string, point, foreground_color, background_color);
 }
 
+void drawStringDirected(const std::wstring& string, const Point& start, const Vector& direction,
+		Color foreground_color, Color background_color) {
+	ColorPair colors(foreground_color, background_color);
+	for (size_t i = 0; i < string.size(); ++i) {
+		drawSymbol(string[i], start + i * direction, foreground_color, background_color);
+	}
+}
+
 
 void drawSegment(const Segment& segment, Color foreground_color, Color background_color) {
 	Vector direction = (segment.second - segment.first).direction();

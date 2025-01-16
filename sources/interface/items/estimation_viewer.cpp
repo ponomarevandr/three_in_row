@@ -13,11 +13,23 @@ EstimationViewer::EstimationViewer(Scene* scene, const Graphics::Point& position
 	turn_shown(turn_shown) {}
 
 void EstimationViewer::draw() const {
+	Graphics::drawBox(
+		Graphics::Rectangle(position, 30, 5),
+		Graphics::Color::BLACK,
+		Graphics::Color::GREY
+	);
+	drawString(
+		L"Оценка",
+		position + Graphics::Vector(13, 0),
+		Graphics::Color::BLACK,
+		Graphics::Color::GREY
+	);
+
 	std::array<size_t, 3> scores = party->getPositions()[*turn_shown].getScores();
 	for (size_t i = 0; i < 3; ++i) {
 		drawString(
 			std::to_wstring(scores[i]),
-			position + Graphics::Vector(10 * i, 0),
+			position + Graphics::Vector(1 + 10 * i, 1),
 			Graphics::player_colors[i + 1],
 			Graphics::Color::GREY
 		);
@@ -27,7 +39,7 @@ void EstimationViewer::draw() const {
 		for (size_t i = 0; i < 3; ++i) {
 			drawString(
 				std::to_wstring(estimation.values[i]),
-				position + Graphics::Vector(10 * i, 2),
+				position + Graphics::Vector(1 + 10 * i, 3),
 				Graphics::player_colors[i + 1],
 				Graphics::Color::GREY
 			);
@@ -40,7 +52,7 @@ void EstimationViewer::draw() const {
 					L"; ходов: " +
 					std::to_wstring(estimation.turns_till_end)
 				),
-				position + Graphics::Vector(0, 3),
+				position + Graphics::Vector(1, 4),
 				Graphics::Color::BLACK,
 				Graphics::Color::GREY
 			);
@@ -48,7 +60,7 @@ void EstimationViewer::draw() const {
 	} else {
 		drawString(
 			L"Вычисление...",
-			position + Graphics::Vector(0, 2),
+			position + Graphics::Vector(10, 3),
 			Graphics::Color::BLACK,
 			Graphics::Color::GREY
 		);

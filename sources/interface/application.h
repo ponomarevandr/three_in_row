@@ -11,7 +11,7 @@ namespace Interface {
 
 class Application {
 private:
-	static constexpr float REFRESH_RATE = 10.0f;
+	static constexpr float REFRESH_RATE = 20.0f;
 
 private:
 	std::vector<std::unique_ptr<Scene>> scenes;

@@ -18,7 +18,7 @@ namespace Interface {
 
 SceneGame::SceneGame(Application* application): Scene(application), party(7, 7, 5000) {
 	auto position_viewer = std::make_unique<PositionViewer>(this,
-		Graphics::Point(0, 0),
+		Graphics::Point(1, 1),
 		&party,
 		&turn_explored,
 		&turn_shown
@@ -26,7 +26,7 @@ SceneGame::SceneGame(Application* application): Scene(application), party(7, 7, 
 	items.push_back(std::move(position_viewer));
 
 	auto estimation_viewer = std::make_unique<EstimationViewer>(this,
-		Graphics::Point(1, party.getHeight() + 3),
+		Graphics::Point(2, party.getHeight() + 6),
 		&party,
 		&turn_shown
 	);
