@@ -13,13 +13,18 @@ namespace Game {
 class AnalysisManagerAsync: public Thread::Worker {
 protected:
 	std::unique_ptr<AnalysisManager> manager;
+	Position position;
+	mutable bool is_result_pending = false;
 
 protected:
 	void action() override;
 
 public:
 	AnalysisManagerAsync() = default;
-	void setup(const Position& position, uint8_t player_turn, size_t time_ms_target);
+
+	// Исключительно по готовности!
+	void setup(Position position, uint8_t player_turn, size_t time_ms_target);
+	bool isResultPending() const;
 	const Estimation& getResult() const;
 	size_t getTimeMsElapsed() const;
 };

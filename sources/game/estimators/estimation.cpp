@@ -18,24 +18,24 @@ Estimation::Estimation(const Position& position) {
 	}
 }
 
-Estimation aggregateForPlayer(Estimation&& first, Estimation&& second, uint8_t player) {
+Estimation aggregateForPlayer(Estimation first, Estimation second, uint8_t player) {
 	if (first.outcome == player && second.outcome == player) {
 		if (first.turns_till_end <= second.turns_till_end) {
-			return first;
+			return std::move(first);
 		} else {
-			return second;
+			return std::move(second);
 		}
 	}
 	if (first.outcome == player)
-		return first;
+		return std::move(first);
 	if (second.outcome == player)
-		return second;
+		return std::move(second);
 	if (first.outcome != OUTCOME_DRAW && first.outcome != OUTCOME_UNKNOWN &&
 			second.outcome != OUTCOME_DRAW && second.outcome != OUTCOME_UNKNOWN) {
 		if (first.turns_till_end >= second.turns_till_end) {
-			return first;
+			return std::move(first);
 		} else {
-			return second;
+			return std::move(second);
 		}
 	}
 	if (first.outcome == OUTCOME_UNKNOWN || second.outcome == OUTCOME_UNKNOWN) {
@@ -43,9 +43,9 @@ Estimation aggregateForPlayer(Estimation&& first, Estimation&& second, uint8_t p
 		first.turns_till_end = second.turns_till_end = 0;
 	}
 	if (first.values[player - 1] >= second.values[player - 1]) {
-		return first;
+		return std::move(first);
 	} else {
-		return second;
+		return std::move(second);
 	}
 }
 

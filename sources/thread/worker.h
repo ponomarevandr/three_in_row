@@ -19,6 +19,7 @@ protected:
 
 public:
 	Worker() = default;
+	virtual ~Worker() = default;
 	void run();					// В отдельном потоке
 	void nextAction();			// Только при условии готовности
 	bool isReady() const;

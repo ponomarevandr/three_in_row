@@ -32,6 +32,7 @@ protected:
 
 public:
 	Estimator(const Position& position, uint8_t player_turn, size_t depth_max);
+	virtual ~Estimator() = default;
 	void run();
 	const Estimation& getResult() const;
 	size_t getTimeMsElapsed() const;

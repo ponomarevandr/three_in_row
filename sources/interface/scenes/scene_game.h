@@ -13,6 +13,7 @@ protected:
 
 public:
 	explicit SceneGame(Application*);
+	void process() override;
 };
 
 }

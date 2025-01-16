@@ -14,6 +14,7 @@ protected:
 
 public:
 	Item(Scene* scene, const Graphics::Point& position);
+	virtual ~Item() = default;
 	virtual void draw() const;
 	virtual void process();
 	bool isActive() const;

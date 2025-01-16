@@ -18,6 +18,7 @@ protected:
 
 public:
 	explicit Scene(Application*);
+	virtual ~Scene() = default;
 	virtual void draw() const;
 	virtual void process();
 	int getKey() const;

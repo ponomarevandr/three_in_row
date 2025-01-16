@@ -43,17 +43,21 @@ void PositionViewer::draw() const {
 	}
 
 	Game::Position game_position =
-		isActive() ? party->getPosition() : party->getPositionOfTurn(*explored_turn);
+		isActive() ? party->getPosition() : party->getPositions()[*explored_turn];
 	for (size_t i = 0; i < party->getHeight(); ++i) {
 		for (size_t j = 0; j < party->getWidth(); ++j) {
 			Graphics::Point current =
 				position + Graphics::Vector(1 + j, party->getHeight() - i);
 			bool is_odd = (i + j) & 1;
 			Graphics::Color background_color = cell_colors[is_odd];
-			if (isActive() && (
-				party->isGameEnded() ? game_position.isCellWinning(i, j) : j == selected_column
-			)) {
-				background_color = cell_colors_selected[is_odd];
+			if (isActive()) {
+				if (party->getOutcome() == Game::OUTCOME_UNKNOWN) {
+					if (j == selected_column)
+						background_color = cell_colors_selected[is_odd];
+				} else {
+					if (game_position.isCellWinning(i, j))
+						background_color = cell_colors_selected[is_odd];
+				}
 			}
 			uint8_t player = game_position.getCell(i, j);
 			Graphics::drawSymbol(
@@ -74,34 +78,45 @@ void PositionViewer::draw() const {
 			Graphics::Color::GREY
 		);
 	}
-	Game::Estimation estimation =
-		isActive() ? party->getEstimation() : party->getEstimationOfTurn(*explored_turn);
-	for (size_t i = 0; i < 3; ++i) {
+	size_t estimation_index = isActive() ? party->getPositions().size() - 1 : *explored_turn;
+	if (party->getEstimations().size() > estimation_index) {
+		Game::Estimation estimation = party->getEstimations()[estimation_index];
+		for (size_t i = 0; i < 3; ++i) {
+			drawString(
+				std::to_wstring(estimation.values[i]),
+				position + Graphics::Vector(1 + 10 * i, party->getHeight() + 5),
+				Graphics::player_colors[i + 1],
+				Graphics::Color::GREY
+			);
+		}
+		if (estimation.outcome != Game::OUTCOME_UNKNOWN) {
+			drawString(
+				(
+					L"Виден конец: " +
+					std::to_wstring(estimation.outcome) +
+					L"; ходов: " +
+					std::to_wstring(estimation.turns_till_end)
+				),
+				position + Graphics::Vector(1, party->getHeight() + 6),
+				Graphics::Color::BLACK,
+				Graphics::Color::GREY
+			);
+		}
+	} else {
 		drawString(
-			std::to_wstring(estimation.values[i]),
-			position + Graphics::Vector(1 + 10 * i, party->getHeight() + 5),
-			Graphics::player_colors[i + 1],
-			Graphics::Color::GREY
-		);
-	}
-	if (estimation.outcome != Game::OUTCOME_UNKNOWN) {
-		drawString(
-			(
-				L"Виден конец: " +
-				std::to_wstring(estimation.outcome) +
-				L"; ходов: " +
-				std::to_wstring(estimation.turns_till_end)
-			),
-			position + Graphics::Vector(1, party->getHeight() + 6),
+			L"Вычисление...",
+			position + Graphics::Vector(1, party->getHeight() + 5),
 			Graphics::Color::BLACK,
 			Graphics::Color::GREY
 		);
 	}
 
 	std::wstring message;
-	uint8_t message_player = party->isGameEnded() ? party->getPlayerWon() : party->getPlayerTurn();
+	uint8_t message_player = party->getOutcome();
+	if (message_player == Game::OUTCOME_UNKNOWN)
+		message_player = party->getPlayerTurn();
 	Graphics::Color message_background_color = Graphics::Color::GREY;
-	if (party->isGameEnded()) {
+	if (party->getOutcome() != Game::OUTCOME_UNKNOWN) {
 		if (scores[0] == 1 && scores[1] == 1 && scores[2] == 1) {
 			message = L"Ничья";
 			message_player = 0;
@@ -130,9 +145,7 @@ void PositionViewer::draw() const {
 }
 
 void PositionViewer::process() {
-	if (!isActive())
-		return;
-	if (party->isGameEnded())
+	if (!isActive() || party->getOutcome() != Game::OUTCOME_UNKNOWN)
 		return;
 	switch (scene->getKey()) {
 	case KEY_LEFT:

@@ -15,7 +15,7 @@
 
 namespace Interface {
 
-SceneGame::SceneGame(Application* application): Scene(application), party(7, 7) {
+SceneGame::SceneGame(Application* application): Scene(application), party(7, 7, 5000) {
 	auto position_viewer = std::make_unique<PositionViewer>(this,
 		Graphics::Point(0, 0),
 		&party,
@@ -50,6 +50,12 @@ SceneGame::SceneGame(Application* application): Scene(application), party(7, 7) 
 		this->application->popScene();
 	});
 	items.push_back(std::move(button_exit));
+}
+
+void SceneGame::process() {
+	if (party.processEstimations())
+		application->redrawNeeded();
+	Scene::process();
 }
 
 }

@@ -18,6 +18,6 @@ struct Estimation {
 	bool operator!=(const Estimation&) const;
 };
 
-Estimation aggregateForPlayer(Estimation&& first, Estimation&& second, uint8_t player);
+Estimation aggregateForPlayer(Estimation first, Estimation second, uint8_t player);
 
 }

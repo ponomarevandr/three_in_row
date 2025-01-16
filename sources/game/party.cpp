@@ -2,74 +2,111 @@
 
 #include "game/analysis/manager.h"
 
+#include "debug/output.h"
+
 
 namespace Game {
 
-Party::Party(size_t height, size_t width) {
-	history.emplace_back(height, width);
+Party::Party(size_t height, size_t width, size_t estimation_time_ms_target):
+		estimation_time_ms_target(estimation_time_ms_target) {
+	positions.emplace_back(height, width);
 	turns.push_back(1 << 20);
-	AnalysisManager analysis_manager(history.back(), getPlayerTurn(), 500);
-	analysis_manager.run();
-	estimations.push_back(analysis_manager.getResult());
+	if (estimation_time_ms_target > 0) {
+		analysis_thread = std::make_unique<std::thread>([this]() {
+			this->analysis_manager.run();
+		});
+	}
 }
 
-const Position& Party::getPosition() const {
-	return history.back();
+Party::~Party() {
+	if (!analysis_thread)
+		return;
+	analysis_manager.waitReady();
+	analysis_manager.terminate();
+	analysis_thread->join();
 }
 
 size_t Party::getHeight() const {
-	return history.back().getHeight();
+	return positions.back().getHeight();
 }
 
 size_t Party::getWidth() const {
-	return history.back().getWidth();
+	return positions.back().getWidth();
+}
+
+const Position& Party::getPosition() const {
+	return positions.back();
 }
 
 bool Party::isTurnPossible(size_t column) const {
-	return history.back().isTurnPossible(column);
+	return positions.back().isTurnPossible(column);
 }
 
 void Party::makeTurn(size_t column) {
-	history.push_back(history.back());
-	history.back().makeTurn(column, getPlayerTurn());
+	uint8_t player = getPlayerTurn();
+	positions.push_back(positions.back().makeTurnCopy(column, player));
 	turns.push_back(column);
-	AnalysisManager analysis_manager(history.back(), getPlayerTurn(), 500);
-	analysis_manager.run();
-	estimations.push_back(analysis_manager.getResult());
+}
+
+uint8_t Party::getPlayerOfTurn(size_t turn) {
+	return turn % 3 + 1;
 }
 
 uint8_t Party::getPlayerTurn() const {
-	return (turns.size() + 2) % 3 + 1;
+	return getPlayerOfTurn(positions.size() - 1);
 }
 
-bool Party::isGameEnded() const {
-	return history.back().getOutcome() != OUTCOME_UNKNOWN;
+uint8_t Party::getOutcome() const {
+	return positions.back().getOutcome();
 }
 
-uint8_t Party::getPlayerWon() const {
-	return history.back().getOutcome();
+const std::vector<Position>& Party::getPositions() const {
+	return positions;
 }
 
 const std::vector<size_t>& Party::getTurns() const {
 	return turns;
 }
 
-const Position& Party::getPositionOfTurn(size_t index) const {
-	return history[index];
-}
-
-const Estimation& Party::getEstimation() const {
-	return estimations.back();
-}
-
-const Estimation& Party::getEstimationOfTurn(size_t index) const {
-	return estimations[index];
+const std::vector<Estimation>& Party::getEstimations() const {
+	return estimations;
 }
 
 void Party::revertToTurn(size_t index) {
-	history.resize(index + 1);
+	positions.resize(index + 1);
 	turns.resize(index + 1);
-	estimations.resize(index + 1);
+	if (index + 1 < estimations.size())
+		estimations.resize(index + 1);
+	is_analysis_discarded = true;
+}
+
+bool Party::processEstimations() {
+	if (
+		estimation_time_ms_target == 0 ||
+		!analysis_manager.isReady() ||
+		estimations.size() == positions.size()
+	) {
+		return false;
+	}
+	bool is_updated = false;
+	if (analysis_manager.isResultPending()) {
+		if (is_analysis_discarded) {
+			analysis_manager.getResult();
+		} else {
+			estimations.push_back(analysis_manager.getResult());
+			is_updated = true;
+		}
+	}
+	is_analysis_discarded = false;
+	if (estimations.size() < positions.size()) {
+		analysis_manager.setup(
+			positions[estimations.size()],
+			getPlayerOfTurn(estimations.size()),
+			estimation_time_ms_target
+		);
+		analysis_manager.nextAction();
+	}
+	return is_updated;
 }
 
 }

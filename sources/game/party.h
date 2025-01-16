@@ -2,35 +2,46 @@
 
 #include "game/position.h"
 #include "game/estimators/estimation.h"
+#include "game/analysis/manager_async.h"
 
 #include <cstdint>
-#include <array>
 #include <vector>
+#include <memory>
+#include <thread>
 
 
 namespace Game {
 
 class Party {
 private:
-	std::vector<Position> history;
+	std::vector<Position> positions;
 	std::vector<size_t> turns;
 	std::vector<Estimation> estimations;
+	size_t estimation_time_ms_target;
+	AnalysisManagerAsync analysis_manager;
+	std::unique_ptr<std::thread> analysis_thread;
+	bool is_analysis_discarded = false;
+
+private:
+	static uint8_t getPlayerOfTurn(size_t turn);
 
 public:
-	Party(size_t height, size_t width);
-	const Position& getPosition() const;
+	Party(size_t height, size_t width, size_t estimation_time_ms_target);  // время 0 => без оценки
+	~Party();
+	Party(Party&&) = default;
+	Party& operator=(Party&&) = default;
 	size_t getHeight() const;
 	size_t getWidth() const;
+	const Position& getPosition() const;
 	bool isTurnPossible(size_t column) const;
 	void makeTurn(size_t column);
 	uint8_t getPlayerTurn() const;
-	bool isGameEnded() const;
-	uint8_t getPlayerWon() const;
+	uint8_t getOutcome() const;
+	const std::vector<Position>& getPositions() const;
 	const std::vector<size_t>& getTurns() const;
-	const Position& getPositionOfTurn(size_t index) const;
-	const Estimation& getEstimation() const;
-	const Estimation& getEstimationOfTurn(size_t index) const;
+	const std::vector<Estimation>& getEstimations() const;
 	void revertToTurn(size_t index);
+	bool processEstimations();
 };
 
 }

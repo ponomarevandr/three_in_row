@@ -7,14 +7,20 @@ void AnalysisManagerAsync::action() {
 	if (!manager)
 		return;
 	manager->run();
+	is_result_pending = true;
 }
 
-void AnalysisManagerAsync::setup(const Position& position, uint8_t player_turn,
-		size_t time_ms_target) {
-	manager = std::make_unique<AnalysisManager>(position, player_turn, time_ms_target);
+void AnalysisManagerAsync::setup(Position position, uint8_t player_turn, size_t time_ms_target) {
+	this->position = std::move(position);
+	manager = std::make_unique<AnalysisManager>(this->position, player_turn, time_ms_target);
+}
+
+bool AnalysisManagerAsync::isResultPending() const {
+	return is_result_pending;
 }
 
 const Estimation& AnalysisManagerAsync::getResult() const {
+	is_result_pending = false;
 	return manager->getResult();
 }
 
