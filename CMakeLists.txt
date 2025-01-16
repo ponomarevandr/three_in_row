@@ -18,6 +18,7 @@ set(SOURCES
 	sources/interface/items/item_base.cpp
 	sources/interface/items/button.cpp
 	sources/interface/items/position_viewer.cpp
+	sources/interface/items/estimation_viewer.cpp
 	sources/interface/items/turns_viewer.cpp
 	sources/interface/turn_translation.cpp
 	sources/game/position.cpp

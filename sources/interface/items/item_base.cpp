@@ -15,6 +15,10 @@ void Item::draw() const {
 
 void Item::process() {}
 
+bool Item::canBeActive() const {
+	return true;
+}
+
 bool Item::isActive() const {
 	return scene->isItemActive(this);
 }

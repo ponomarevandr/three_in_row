@@ -15,12 +15,13 @@ private:
 
 private:
 	Game::Party* party;
-	size_t* explored_turn;
+	size_t* turn_explored;
+	size_t* turn_shown;
 	size_t selected_column = 0;
 
 public:
 	PositionViewer(Scene* scene, const Graphics::Point& position, Game::Party* party,
-		size_t* explored_turn);
+		size_t* turn_explored, size_t* turn_shown);
 	void draw() const override;
 	void process() override;
 };

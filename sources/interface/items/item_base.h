@@ -17,6 +17,7 @@ public:
 	virtual ~Item() = default;
 	virtual void draw() const;
 	virtual void process();
+	virtual bool canBeActive() const;
 	bool isActive() const;
 };
 

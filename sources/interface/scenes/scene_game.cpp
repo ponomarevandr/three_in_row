@@ -3,6 +3,7 @@
 #include "interface/application.h"
 #include "interface/items/button.h"
 #include "interface/items/position_viewer.h"
+#include "interface/items/estimation_viewer.h"
 #include "interface/items/turns_viewer.h"
 #include "interface/scenes/scene_yes_no.h"
 #include "interface/turn_translation.h"
@@ -19,23 +20,31 @@ SceneGame::SceneGame(Application* application): Scene(application), party(7, 7, 
 	auto position_viewer = std::make_unique<PositionViewer>(this,
 		Graphics::Point(0, 0),
 		&party,
-		&explored_turn
+		&turn_explored,
+		&turn_shown
 	);
 	items.push_back(std::move(position_viewer));
 
+	auto estimation_viewer = std::make_unique<EstimationViewer>(this,
+		Graphics::Point(1, party.getHeight() + 3),
+		&party,
+		&turn_shown
+	);
+	items.push_back(std::move(estimation_viewer));
+
 	auto turns_viewer = std::make_unique<TurnsViewer>(this,
 		Graphics::Point(Graphics::getScreenWidth() - 19, 1),
-		10,//Graphics::getScreenHeight() - 4,
+		Graphics::getScreenHeight() - 4,
 		&party,
-		&explored_turn
+		&turn_explored
 	);
 	turns_viewer->setCallbackRevert([this]() {
 		auto scene_yes_no = std::make_unique<SceneYesNo>(this->application);
 		scene_yes_no->setQuestion(
-			L"Откатить партию к ходу " + turnToString(this->explored_turn) + L"?"
+			L"Откатить партию к ходу " + turnToString(this->turn_explored) + L"?"
 		);
 		scene_yes_no->setCallback(true, [this]() {
-			this->party.revertToTurn(explored_turn);
+			this->party.revertToTurn(turn_explored);
 		});
 		this->application->pushScene(std::move(scene_yes_no));
 	});

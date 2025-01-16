@@ -13,7 +13,7 @@ class TurnsViewer: public Item {
 private:
 	size_t height;
 	Game::Party* party;
-	size_t* explored_turn;
+	size_t* turn_explored;
 	size_t first_turn_shown = 0;
 	std::function<void()> callback_revert;
 
@@ -22,7 +22,7 @@ private:
 
 public:
 	TurnsViewer(Scene* scene, const Graphics::Point& position, size_t height, Game::Party* party,
-		size_t* explored_turn);
+		size_t* turn_explored);
 	void draw() const override;
 	void process() override;
 	void setCallbackRevert(std::function<void()>);

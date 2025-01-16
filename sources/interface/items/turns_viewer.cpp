@@ -12,8 +12,8 @@
 namespace Interface {
 
 TurnsViewer::TurnsViewer(Scene* scene, const Graphics::Point& position, size_t height,
-	Game::Party* party, size_t* explored_turn): Item(scene, position), height(height),
-	party(party), explored_turn(explored_turn) {}
+	Game::Party* party, size_t* turn_explored): Item(scene, position), height(height),
+	party(party), turn_explored(turn_explored) {}
 
 void TurnsViewer::draw() const {
 	for (size_t i = 0; i < 3; ++i) {
@@ -27,7 +27,7 @@ void TurnsViewer::draw() const {
 	const std::vector<size_t>& turns = party->getTurns();
 	for (size_t i = 0; first_turn_shown + i < turns.size() + 1 && i < (height - 1) * 3; ++i) {
 		Graphics::Color background_color = (
-			isActive() && *explored_turn == first_turn_shown + i
+			isActive() && *turn_explored == first_turn_shown + i
 		) ? Graphics::Color::YELLOW_DARK : Graphics::Color::GREY;
 		std::wstring number_string =
 			first_turn_shown + i < turns.size() ? std::to_wstring(turns[i] + 1) : L"";
@@ -57,24 +57,24 @@ void TurnsViewer::draw() const {
 }
 
 void TurnsViewer::updateFirstTurnShown() {
-	first_turn_shown = std::min(first_turn_shown, *explored_turn / 3 * 3);
+	first_turn_shown = std::min(first_turn_shown, *turn_explored / 3 * 3);
 	first_turn_shown =
-		(std::max(first_turn_shown / 3 + height - 2, *explored_turn / 3) - height + 2) * 3;
+		(std::max(first_turn_shown / 3 + height - 2, *turn_explored / 3) - height + 2) * 3;
 }
 
 void TurnsViewer::process() {
 	if (isActive()) {
 		switch (scene->getKey()) {
 		case KEY_LEFT:
-			if (*explored_turn > 0)
-				--(*explored_turn);
+			if (*turn_explored > 0)
+				--(*turn_explored);
 			break;
 		case KEY_RIGHT:
-			if (*explored_turn < party->getTurns().size())
-				++(*explored_turn);
+			if (*turn_explored < party->getTurns().size())
+				++(*turn_explored);
 			break;
 		case KEY_ENTER:
-			if (*explored_turn != party->getTurns().size() && callback_revert)
+			if (*turn_explored != party->getTurns().size() && callback_revert)
 				callback_revert();
 			break;
 		}
