@@ -44,7 +44,7 @@ bool Party::isTurnPossible(size_t column) const {
 void Party::makeTurn(size_t column) {
 	uint8_t player = getPlayerTurn();
 	positions.push_back(positions.back().makeTurnCopy(column, player));
-	turns.push_back(column);
+	columns.push_back(column);
 }
 
 uint8_t Party::getPlayerOfTurn(size_t turn) {
@@ -63,8 +63,8 @@ const std::vector<Position>& Party::getPositions() const {
 	return positions;
 }
 
-const std::vector<size_t>& Party::getTurns() const {
-	return turns;
+const std::vector<size_t>& Party::getColumns() const {
+	return columns;
 }
 
 const std::vector<Estimation>& Party::getEstimations() const {
@@ -73,7 +73,7 @@ const std::vector<Estimation>& Party::getEstimations() const {
 
 void Party::revertToTurn(size_t index) {
 	positions.resize(index + 1);
-	turns.resize(index);
+	columns.resize(index);
 	if (index + 1 < estimations.size())
 		estimations.resize(index + 1);
 	is_analysis_discarded = true;

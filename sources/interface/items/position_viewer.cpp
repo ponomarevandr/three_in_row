@@ -117,7 +117,7 @@ void PositionViewer::draw() const {
 }
 
 void PositionViewer::process() {
-	size_t turn_shown_new = isActive() ? party->getTurns().size() : *turn_explored;
+	size_t turn_shown_new = isActive() ? party->getColumns().size() : *turn_explored;
 	if (turn_shown_new != *turn_shown) {
 		*turn_shown = turn_shown_new;
 		scene->redrawNeeded();
@@ -135,7 +135,7 @@ void PositionViewer::process() {
 	case KEY_SPACE:
 		if (party->isTurnPossible(selected_column)) {
 			party->makeTurn(selected_column);
-			*turn_explored = party->getTurns().size();
+			*turn_explored = party->getColumns().size();
 		}
 		break;
 	}

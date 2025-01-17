@@ -24,13 +24,13 @@ void TurnsViewer::draw() const {
 			Graphics::Color::GREY
 		);
 	}
-	const std::vector<size_t>& turns = party->getTurns();
-	for (size_t i = 0; first_turn_shown + i < turns.size() + 1 && i < (height - 1) * 3; ++i) {
+	const std::vector<size_t>& columns = party->getColumns();
+	for (size_t i = 0; first_turn_shown + i < columns.size() + 1 && i < (height - 1) * 3; ++i) {
 		Graphics::Color background_color = (
 			isActive() && *turn_explored == first_turn_shown + i
 		) ? Graphics::Color::YELLOW_DARK : Graphics::Color::GREY;
 		std::wstring number_string =
-			first_turn_shown + i < turns.size() ? std::to_wstring(turns[i] + 1) : L"";
+			first_turn_shown + i < columns.size() ? std::to_wstring(columns[i] + 1) : L"";
 		number_string.resize(4, L' ');
 		Graphics::drawString(
 			number_string,
@@ -70,11 +70,11 @@ void TurnsViewer::process() {
 				--(*turn_explored);
 			break;
 		case KEY_RIGHT:
-			if (*turn_explored < party->getTurns().size())
+			if (*turn_explored < party->getColumns().size())
 				++(*turn_explored);
 			break;
 		case KEY_ENTER:
-			if (*turn_explored != party->getTurns().size() && callback_revert)
+			if (*turn_explored != party->getColumns().size() && callback_revert)
 				callback_revert();
 			break;
 		}

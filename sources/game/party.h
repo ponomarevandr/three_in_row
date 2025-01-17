@@ -15,7 +15,7 @@ namespace Game {
 class Party {
 private:
 	std::vector<Position> positions;
-	std::vector<size_t> turns;
+	std::vector<size_t> columns;
 	std::vector<Estimation> estimations;
 	size_t estimation_time_ms_target;
 	AnalysisManagerAsync analysis_manager;
@@ -38,7 +38,7 @@ public:
 	uint8_t getPlayerTurn() const;
 	uint8_t getOutcome() const;
 	const std::vector<Position>& getPositions() const;
-	const std::vector<size_t>& getTurns() const;
+	const std::vector<size_t>& getColumns() const;
 	const std::vector<Estimation>& getEstimations() const;
 	void revertToTurn(size_t index);
 	bool processEstimations();
