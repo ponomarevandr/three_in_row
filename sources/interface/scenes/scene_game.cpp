@@ -9,20 +9,35 @@
 #include "interface/turn_translation.h"
 #include "graphics/geometry.h"
 #include "graphics/screen.h"
+#include "game/players/player_base.h"
+#include "game/party.h"
 
 #include <string>
-#include <memory>
 
 
 namespace Interface {
 
-SceneGame::SceneGame(Application* application): Scene(application), party(7, 7, 5000) {
+SceneGame::SceneGame(Application* application): Scene(application) {
+	std::array<std::unique_ptr<Game::Player>, 3> players = {
+		std::make_unique<Game::PlayerUser>(),
+		std::make_unique<Game::PlayerUser>(),
+		std::make_unique<Game::PlayerUser>()
+	};
+	for (size_t i = 0; i < 3; ++i) {
+		player_users[i] = static_cast<Game::PlayerUser*>(players[i].get());
+	}
+	game = std::make_unique<Game::Game>(7, 7, 5000, std::move(players));
+	const Game::Party& party = game->getParty();
+
 	auto position_viewer = std::make_unique<PositionViewer>(this,
 		Graphics::Point(1, 1),
 		&party,
 		&turn_explored,
 		&turn_shown
 	);
+	position_viewer->setCallbackMakeTurn([this](size_t turn_column) {
+		this->player_users[this->game->getParty().getPlayerTurn() - 1]->setTurnColumn(turn_column);
+	});
 	items.push_back(std::move(position_viewer));
 
 	auto estimation_viewer = std::make_unique<EstimationViewer>(this,
@@ -43,9 +58,9 @@ SceneGame::SceneGame(Application* application): Scene(application), party(7, 7, 
 		scene_yes_no->setQuestion(
 			L"Откатить партию к ходу " + turnToString(this->turn_explored) + L"?"
 		);
-		scene_yes_no->setCallback(true, [this]() {
-			this->party.revertToTurn(turn_explored);
-		});
+		//scene_yes_no->setCallback(true, [this]() {
+		//	this->game->getParty().revertToTurn(turn_explored);
+		//});
 		this->application->pushScene(std::move(scene_yes_no));
 	});
 	items.push_back(std::move(turns_viewer));
@@ -62,8 +77,12 @@ SceneGame::SceneGame(Application* application): Scene(application), party(7, 7, 
 }
 
 void SceneGame::process() {
-	if (party.processEstimations())
+	if (game->processEstimations())
 		application->redrawNeeded();
+	if (game->processTurn()) {
+		turn_explored = game->getParty().getColumns().size();
+		application->redrawNeeded();
+	}
 	Scene::process();
 }
 

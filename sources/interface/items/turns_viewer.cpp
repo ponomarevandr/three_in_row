@@ -12,7 +12,7 @@
 namespace Interface {
 
 TurnsViewer::TurnsViewer(Scene* scene, const Graphics::Point& position, size_t height,
-	Game::Party* party, size_t* turn_explored): Item(scene, position), height(height),
+	const Game::Party* party, size_t* turn_explored): Item(scene, position), height(height),
 	party(party), turn_explored(turn_explored) {}
 
 void TurnsViewer::draw() const {

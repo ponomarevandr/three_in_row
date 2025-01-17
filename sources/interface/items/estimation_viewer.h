@@ -10,11 +10,11 @@ namespace Interface {
 
 class EstimationViewer: public Item {
 private:
-	Game::Party* party;
+	const Game::Party* party;
 	size_t* turn_shown;
 
 public:
-	EstimationViewer(Scene* scene, const Graphics::Point& position, Game::Party* party,
+	EstimationViewer(Scene* scene, const Graphics::Point& position, const Game::Party* party,
 		size_t* turn_shown);
 	void draw() const override;
 	bool canBeActive() const override;

@@ -22,9 +22,9 @@ const Graphics::Color PositionViewer::cell_colors_selected[2] = {
 	Graphics::Color::YELLOW_DARK,
 };
 
-PositionViewer::PositionViewer(Scene* scene, const Graphics::Point& position, Game::Party* party,
-	size_t* turn_explored, size_t* turn_shown): Item(scene, position), party(party),
-	turn_explored(turn_explored), turn_shown(turn_shown) {}
+PositionViewer::PositionViewer(Scene* scene, const Graphics::Point& position,
+	const Game::Party* party, size_t* turn_explored, size_t* turn_shown): Item(scene, position),
+	party(party), turn_explored(turn_explored), turn_shown(turn_shown) {}
 
 void PositionViewer::draw() const {
 	Graphics::drawBox(
@@ -133,12 +133,14 @@ void PositionViewer::process() {
 		break;
 	case KEY_ENTER:
 	case KEY_SPACE:
-		if (party->isTurnPossible(selected_column)) {
-			party->makeTurn(selected_column);
-			*turn_explored = party->getColumns().size();
-		}
+		if (party->isTurnPossible(selected_column) && callback_make_turn)
+			callback_make_turn(selected_column);
 		break;
 	}
+}
+
+void PositionViewer::setCallbackMakeTurn(std::function<void(size_t)> callback_make_turn) {
+	this->callback_make_turn = std::move(callback_make_turn);
 }
 
 }

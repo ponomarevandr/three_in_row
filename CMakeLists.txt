@@ -31,6 +31,9 @@ set(SOURCES
 	sources/game/estimators/estimator_table.cpp
 	sources/game/analysis/manager.cpp
 	sources/game/analysis/manager_async.cpp
+	sources/game/game.cpp
+	sources/game/players/player_base.cpp
+	sources/game/players/player_user.cpp
 	sources/thread/worker.cpp
 )
 

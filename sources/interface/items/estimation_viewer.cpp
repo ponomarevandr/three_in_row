@@ -9,7 +9,7 @@
 namespace Interface {
 
 EstimationViewer::EstimationViewer(Scene* scene, const Graphics::Point& position,
-	Game::Party* party, size_t* turn_shown): Item(scene, position), party(party),
+	const Game::Party* party, size_t* turn_shown): Item(scene, position), party(party),
 	turn_shown(turn_shown) {}
 
 void EstimationViewer::draw() const {
