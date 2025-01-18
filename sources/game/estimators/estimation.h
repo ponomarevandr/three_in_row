@@ -11,7 +11,8 @@ namespace Game {
 struct Estimation {
 	std::array<float, 3> values;
 	uint8_t outcome = OUTCOME_UNKNOWN;
-	size_t turns_till_end = 0;
+	uint16_t turns_till_end = 0;
+	uint16_t column_best = 0;
 	Estimation() = default;
 	explicit Estimation(const Position&);
 	bool operator==(const Estimation&) const;

@@ -34,12 +34,13 @@ void EstimationViewer::draw() const {
 			Graphics::Color::GREY
 		);
 	}
+
 	if (*turn_shown < party->getEstimations().size()) {
 		Game::Estimation estimation = party->getEstimations()[*turn_shown];
 		for (size_t i = 0; i < 3; ++i) {
 			drawString(
 				std::to_wstring(estimation.values[i]),
-				position + Graphics::Vector(1 + 10 * i, 3),
+				position + Graphics::Vector(1 + 10 * i, 2),
 				Graphics::player_colors[i + 1],
 				Graphics::Color::GREY
 			);
@@ -53,6 +54,14 @@ void EstimationViewer::draw() const {
 					std::to_wstring(estimation.turns_till_end)
 				),
 				position + Graphics::Vector(1, 4),
+				Graphics::Color::BLACK,
+				Graphics::Color::GREY
+			);
+		}
+		if (party->getOutcome() == Game::OUTCOME_UNKNOWN) {
+			drawString(
+				L"Лучший ход: " + std::to_wstring(estimation.column_best),
+				position + Graphics::Vector(1, 3),
 				Graphics::Color::BLACK,
 				Graphics::Color::GREY
 			);
