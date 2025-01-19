@@ -26,9 +26,9 @@ set(SOURCES
 	sources/game/estimators/estimation.cpp
 	sources/game/estimators/estimator_base.cpp
 	sources/game/estimators/estimator_naive.cpp
-	sources/game/estimators/estimator_retracting.cpp
-	sources/game/estimators/estimator_pruning.cpp
-	sources/game/estimators/estimator_table.cpp
+#	sources/game/estimators/estimator_retracting.cpp
+#	sources/game/estimators/estimator_pruning.cpp
+#	sources/game/estimators/estimator_table.cpp
 	sources/game/analysis/manager.cpp
 	sources/game/analysis/manager_async.cpp
 	sources/game/game.cpp

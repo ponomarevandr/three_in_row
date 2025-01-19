@@ -1,9 +1,5 @@
 #include "party.h"
 
-#include "game/analysis/manager.h"
-
-#include "debug/output.h"
-
 
 namespace Game {
 

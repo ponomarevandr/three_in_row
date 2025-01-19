@@ -11,11 +11,12 @@ namespace Game {
 
 class EstimatorNaive: public Estimator {
 protected:
-	Estimation estimatePosition(Position& position, uint8_t player_turn, size_t depth) override;
+	void estimatePosition() override;
 	std::string getDebugName() const override;
+	Estimation estimatePositionImpl(const Position& position, uint8_t player_turn, uint16_t depth);
 
 public:
-	EstimatorNaive(const Position& position, uint8_t player_turn, size_t depth_max);
+	EstimatorNaive(Position position, uint8_t player_turn, uint16_t depth);
 };
 
 }

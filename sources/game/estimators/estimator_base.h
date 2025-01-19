@@ -3,6 +3,7 @@
 #include "game/position.h"
 #include "game/estimators/estimation.h"
 
+#include <cstdint>
 #include <string>
 #include <chrono>
 
@@ -17,21 +18,21 @@ protected:
 	static constexpr bool DEBUG = false;
 
 protected:
-	const Position& position_start;
+	Position position_start;
 	uint8_t player_turn_start;
-	size_t depth_max;
+	uint16_t depth_max;
 	Estimation result;
 	size_t nodes_visited;
 	Clock::time_point time_beginning;
 	Clock::time_point time_end;
 
 protected:
-	virtual Estimation estimatePosition(Position& position, uint8_t player_turn, size_t depth) = 0;
+	virtual void estimatePosition() = 0;
 	virtual std::string getDebugName() const;
 	virtual void debugPrint() const;
 
 public:
-	Estimator(const Position& position, uint8_t player_turn, size_t depth_max);
+	Estimator(Position position, uint8_t player_turn, uint16_t depth);
 	virtual ~Estimator() = default;
 	void run();
 	const Estimation& getResult() const;

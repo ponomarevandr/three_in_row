@@ -19,6 +19,8 @@ struct Estimation {
 	bool operator!=(const Estimation&) const;
 };
 
+// При агрегировании состояний по заданному игроку неизбежно остается доля случайности
+// для двух других! Максимум не учитывает разницу в значениях побочных игроков.
 Estimation aggregateForPlayer(Estimation first, Estimation second, uint8_t player);
 
 }

@@ -7,14 +7,13 @@
 
 namespace Game {
 
-Estimator::Estimator(const Position& position, uint8_t player_turn, size_t depth_max):
-	position_start(position), player_turn_start(player_turn), depth_max(depth_max) {}
+Estimator::Estimator(Position position, uint8_t player_turn, uint16_t depth):
+	position_start(std::move(position)), player_turn_start(player_turn), depth_max(depth) {}
 
 void Estimator::run() {
 	nodes_visited = 0;
 	time_beginning = Clock::now();
-	Position position_start_copy = position_start;
-	result = estimatePosition(position_start_copy, player_turn_start, depth_max);
+	estimatePosition();
 	time_end = Clock::now();
 	debugPrint();
 }

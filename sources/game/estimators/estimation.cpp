@@ -50,8 +50,11 @@ Estimation aggregateForPlayer(Estimation first, Estimation second, uint8_t playe
 }
 
 bool Estimation::operator==(const Estimation& other) const {
-	return values == other.values && outcome == other.outcome &&
-		turns_till_end == other.turns_till_end;
+	return
+		values == other.values &&
+		outcome == other.outcome &&
+		turns_till_end == other.turns_till_end &&
+		column_best == other.column_best;
 }
 
 bool Estimation::operator!=(const Estimation& other) const {

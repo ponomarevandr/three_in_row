@@ -1,7 +1,8 @@
 #include "manager.h"
 
-#include "game/estimators/estimator_pruning.h"
-#include "game/estimators/estimator_table.h"
+//#include "game/estimators/estimator_pruning.h"
+//#include "game/estimators/estimator_table.h"
+#include "game/estimators/estimator_naive.h"
 #include "debug/output.h"
 
 #include <sstream>
@@ -32,7 +33,7 @@ void AnalysisManager::run() {
 		is_pruning_running &= depth < 2 ||
 			times_ms_sum + getNextTimeMsApproximate(times_ms_pruning) <= time_ms_target;
 		if (is_pruning_running) {
-			EstimatorPruning estimator_pruning(position, player_turn, depth);
+			/*EstimatorPruning*/ EstimatorNaive estimator_pruning(position, player_turn, depth);
 			estimator_pruning.run();
 			result = estimator_pruning.getResult();
 			times_ms_pruning.push_back(estimator_pruning.getTimeMsElapsed());
@@ -41,7 +42,7 @@ void AnalysisManager::run() {
 		is_table_running &= depth < 2 ||
 			times_ms_sum + getNextTimeMsApproximate(times_ms_table) <= time_ms_target;
 		if (is_table_running) {
-			EstimatorTable estimator_table(position, player_turn, depth);
+			/*EstimatorTable*/ EstimatorNaive estimator_table(position, player_turn, depth);
 			estimator_table.run();
 			result = estimator_table.getResult();
 			times_ms_table.push_back(estimator_table.getTimeMsElapsed());

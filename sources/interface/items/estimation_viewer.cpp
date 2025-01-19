@@ -58,9 +58,9 @@ void EstimationViewer::draw() const {
 				Graphics::Color::GREY
 			);
 		}
-		if (party->getOutcome() == Game::OUTCOME_UNKNOWN) {
+		if (party->getPositions()[*turn_shown].getOutcome() == Game::OUTCOME_UNKNOWN) {
 			drawString(
-				L"Лучший ход: " + std::to_wstring(estimation.column_best),
+				L"Лучший ход: " + std::to_wstring(estimation.column_best + 1),
 				position + Graphics::Vector(1, 3),
 				Graphics::Color::BLACK,
 				Graphics::Color::GREY
