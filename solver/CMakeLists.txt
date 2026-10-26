@@ -7,7 +7,8 @@ project(ThreeInRow)
 include(ExternalProject)
 
 set(SOURCES
-	
+	sources/game/score.cpp
+	sources/game/position.cpp
 )
 
 set(TEST_SOURCES

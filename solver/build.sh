@@ -12,7 +12,10 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "==================== Running Make..."
-make
+if [[ -n "$@" ]]; then
+    echo "targets: $@"
+fi
+make $@
 if [ $? -ne 0 ]; then
 	exit 1
 fi

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 cd "$(dirname $0)"
-./build.sh
+./build.sh tests
 if [ $? -ne 0 ]; then
 	exit 1
 fi
