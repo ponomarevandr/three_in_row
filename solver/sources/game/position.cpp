@@ -1,8 +1,11 @@
 #include "position.h"
 
+#include <sstream>
+#include <exception>
+#include <algorithm>
+
 
 namespace ThreeInRow {
-
 
 Position::Position() {
 	initialize(0, 0);
@@ -64,6 +67,31 @@ const Score& Position::getScore() const {
 	return scores.back();
 }
 
+void Position::fromStream(std::istream& in) {
+	std::string line;
+	std::getline(in, line);
+	parseHeaderLine(std::move(line));
+	for (size_t j = height; j > 0; --j) {
+		std::getline(in, line);
+		for (size_t i = 0; i < std::min(width, line.size()); ++i) {
+			const char* ptr = std::find(SYMBOLS, SYMBOLS + std::size(SYMBOLS), line[i]);
+			if (ptr == SYMBOLS + std::size(SYMBOLS))
+				throw std::runtime_error("Wrong field symbol!");
+			field.set(1 + i, j, ptr - SYMBOLS);
+		}
+	}
+}
+
+void Position::toStream(std::ostream& out) const {
+	out << width << " x " << height << "\n";
+	for (size_t j = height; j > 0; --j) {
+		for (size_t i = 1; i < width + 1; ++i) {
+			out << SYMBOLS[field.get(i, j)];
+		}
+		out << "\n";
+	}
+}
+
 
 bool Position::isCellBoundary(size_t i, size_t j) const {
 	return i == 0 || j == 0 || i == width + 1 || j == height + 1;
@@ -108,6 +136,17 @@ Score Position::getCellScore(int32_t i, int32_t j, bool is_extended) const {
 		score.score[player] += Score::COST[count];
 	}
 	return score;
+}
+
+void Position::parseHeaderLine(std::string header) {
+	for (size_t i = 0; i < header.size(); ++i) {
+		if (!std::isdigit(header[i]))
+			header[i] = ' ';
+	}
+	std::stringstream sstream(std::move(header));
+	if (!(sstream >> width >> height))
+		throw std::runtime_error("Invalid header!");
+	initialize(width, height);
 }
 
 }
