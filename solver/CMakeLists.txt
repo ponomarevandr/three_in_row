@@ -14,6 +14,7 @@ set(SOURCES
 set(TEST_SOURCES
 	test/test_array_2d.cpp
 	test/test_score.cpp
+	test/test_position.cpp
 )
 
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -Wall)

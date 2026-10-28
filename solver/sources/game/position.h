@@ -30,7 +30,7 @@ public:
 	uint8_t getCell(size_t user_i, size_t user_j) const;		// Без учета стенки
 
 	void setupScore();	// Нужно при нетривиальной начальной позиции
-	bool makeTurn(size_t user_i, uint8_t player);
+	bool makeTurn(uint8_t player, size_t user_i);
 	void retractTurn();
 	const Score& getScore() const;
 
@@ -65,7 +65,7 @@ private:
 		 0,  0,  0, -1,  0, -2,
 		 0,  0, -1, -1, -2, -2,
 	};
-	static constexpr char SYMBOLS[] = "xov #";
+	static constexpr char SYMBOLS[] = "xov.#";
 };
 
 }

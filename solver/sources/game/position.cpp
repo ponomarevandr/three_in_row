@@ -36,14 +36,14 @@ uint8_t Position::getCell(size_t user_i, size_t user_j) const {
 void Position::setupScore() {
 	scores.clear();
 	scores.emplace_back();
-	for (size_t i = 2; i < width; ++i) {
-		for (size_t j = 2; j < height; ++j) {
+	for (size_t i = 1; i < width + 1; ++i) {
+		for (size_t j = 1; j < height + 1; ++j) {
 			scores[0] += getCellScore(i, j, false);
 		}
 	}
 }
 
-bool Position::makeTurn(size_t user_i, uint8_t player) {
+bool Position::makeTurn(uint8_t player, size_t user_i) {
 	size_t i = 1 + user_i;
 	size_t j = getColumnTop(i) + 1;
 	if (j == height + 2)
@@ -80,6 +80,7 @@ void Position::fromStream(std::istream& in) {
 			field.set(1 + i, j, ptr - SYMBOLS);
 		}
 	}
+	setupScore();
 }
 
 void Position::toStream(std::ostream& out) const {
