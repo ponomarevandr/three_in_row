@@ -37,7 +37,21 @@ Score Score::operator-(const Score& other) const {
 	return result;
 }
 
-Ratio Score::getRatio() const {
+void Score::addForPlayer(uint8_t player, uint8_t count) {
+	score[player] += COST[count];
+	if (count == 3)
+		winner = player;
+}
+
+const std::array<uint32_t, 3>& Score::getScore() const {
+	return score;
+}
+
+uint8_t Score::getWinner() const {
+	return winner;
+}
+
+Ratio Score::createRatio() const {
 	Ratio ratio;
 	if (winner != NO_WINNER) {
 		ratio.ratio[winner] = 1.0;
@@ -53,6 +67,18 @@ Ratio Score::getRatio() const {
 	return ratio;
 }
 
+
+const std::array<float, 3>& Ratio::getRatio() const {
+	return ratio;
+}
+
+uint8_t Ratio::getWinner() const {
+	return winner;
+}
+
+const std::array<float, 3>& Ratio::getEval() const {
+	return eval;
+}
 
 void Ratio::updateEval() {
 	eval[0] = ratio[0] - std::max(ratio[1], ratio[2]);

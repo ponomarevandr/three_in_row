@@ -133,7 +133,7 @@ Score Position::getCellScore(int32_t i, int32_t j, bool is_extended) const {
 		}
 		if (player == EMPTY)
 			continue;
-		score.score[player] += Score::COST[count];
+		score.addForPlayer(player, count);
 	}
 	return score;
 }
