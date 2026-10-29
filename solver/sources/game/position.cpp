@@ -33,6 +33,14 @@ uint8_t Position::getCell(size_t user_i, size_t user_j) const {
 	return field.get(1 + user_i, 1 + user_j);
 }
 
+size_t Position::getWidth() const {
+	return width;
+}
+
+size_t Position::getHeight() const {
+	return height;
+}
+
 void Position::setupScore() {
 	scores.clear();
 	scores.emplace_back();
@@ -46,7 +54,7 @@ void Position::setupScore() {
 bool Position::makeTurn(uint8_t player, size_t user_i) {
 	size_t i = 1 + user_i;
 	size_t j = getColumnTop(i) + 1;
-	if (j == height + 2)
+	if (j == height + 1)
 		return false;
 	scores.push_back(scores.back());
 	scores.back() -= getCellScore(i, j, true);
@@ -100,7 +108,7 @@ bool Position::isCellBoundary(size_t i, size_t j) const {
 
 size_t Position::getColumnTop(size_t i) const {
 	size_t j = 1;
-	while (j < height + 2 && field.get(i, j) != EMPTY) {
+	while (j < height + 1 && field.get(i, j) != EMPTY) {
 		++j;
 	}
 	return j - 1;

@@ -39,15 +39,15 @@ class Ratio {
 private:
 	std::array<float, 3> ratio = { 0, 0, 0 };
 	uint8_t winner = Score::NO_WINNER;
-	std::array<float, 3> eval;
+	std::array<float, 3> eval = { -1, -1, -1 };
 
 public:
+	Ratio() = default;
 	const std::array<float, 3>& getRatio() const;
 	uint8_t getWinner() const;
 	const std::array<float, 3>& getEval() const;
 
 private:
-	Ratio() = default;
 	void updateEval();
 };
 

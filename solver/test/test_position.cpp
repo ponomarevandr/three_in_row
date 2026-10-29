@@ -80,3 +80,26 @@ TEST(Position, Stream) {
 		"xoov.v\n"
 	));
 }
+
+/*
+".v."
+".o."
+".x."
+*/
+TEST(Position, RetractOnTop) {
+	Position position;
+	position.initialize(3, 3);
+	position.makeTurn(0, 1);
+	position.makeTurn(1, 1);
+	position.makeTurn(2, 1);
+	ASSERT_FALSE(position.makeTurn(0, 1));
+	position.retractTurn();
+	std::stringstream out;
+	position.toStream(out);
+	ASSERT_EQ(out.str(), std::string(
+		"3 x 3\n"
+		"...\n"
+		".o.\n"
+		".x.\n"
+	));
+}

@@ -28,6 +28,8 @@ public:
 	void initialize(size_t width, size_t height);
 	void setCell(size_t user_i, size_t user_j, uint8_t value);	// Без учета стенки
 	uint8_t getCell(size_t user_i, size_t user_j) const;		// Без учета стенки
+	size_t getWidth() const;
+	size_t getHeight() const;
 
 	void setupScore();	// Нужно при нетривиальной начальной позиции
 	bool makeTurn(uint8_t player, size_t user_i);

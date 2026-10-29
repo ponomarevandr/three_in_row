@@ -9,12 +9,16 @@ include(ExternalProject)
 set(SOURCES
 	sources/game/score.cpp
 	sources/game/position.cpp
+	sources/game/player_functions.cpp
+	sources/estimator/estimator.cpp
+	sources/estimator/estimator_naive.cpp
 )
 
 set(TEST_SOURCES
 	test/test_array_2d.cpp
 	test/test_score.cpp
 	test/test_position.cpp
+	test/test_player_functions.cpp
 )
 
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -Wall)
