@@ -35,6 +35,7 @@ public:
 	bool makeTurn(uint8_t player, size_t user_i);
 	void retractTurn();
 	const Score& getScore() const;
+	bool isGameEnded() const;
 
 	void fromStream(std::istream&);
 	void toStream(std::ostream&) const;

@@ -75,6 +75,12 @@ const Score& Position::getScore() const {
 	return scores.back();
 }
 
+bool Position::isGameEnded() const {
+	return
+		scores.back().getWinner() != Score::NO_WINNER ||
+		turns.size() == width * height;
+}
+
 void Position::fromStream(std::istream& in) {
 	std::string line;
 	std::getline(in, line);

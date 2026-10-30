@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cstddef>
 #include <array>
 
 
@@ -36,19 +37,29 @@ public:
 
 class Ratio {
 	friend class Score;
+public:
+	static const uint8_t NO_WINNER = Score::NO_WINNER;
+	static const uint8_t DRAW = 4;
+
 private:
 	std::array<float, 3> ratio = { 0, 0, 0 };
-	uint8_t winner = Score::NO_WINNER;
+	uint8_t winner = NO_WINNER;
+	size_t turns_till_end = 0;  // Имеет смысл только при определенном победителе (или ничьей)
 	std::array<float, 3> eval = { -1, -1, -1 };
 
 public:
 	Ratio() = default;
 	const std::array<float, 3>& getRatio() const;
 	uint8_t getWinner() const;
+	void declareDraw();
+	size_t getTurnsTillEnd() const;
+	void incTurnsTillEnd();
 	const std::array<float, 3>& getEval() const;
 
 private:
 	void updateEval();
 };
+
+bool isRatioBetter(const Ratio& first, const Ratio& second, uint8_t player);
 
 }
